@@ -1,12 +1,13 @@
-# Setup MCP ? Memory + DB (inti kit)
+# Setup MCP — Memory + DB + shell (inti kit)
 
 | MCP | Peran | Wajib? |
 |-----|-------|--------|
 | **Codebase Memory** | Peta fungsi/route (graph) | Disarankan |
 | **MemPalace** | Catatan session / keputusan | Disarankan |
+| **RTK** (`rtk-mcp`) | Shell via `run_command`; output CLI dipangkas 60–90% token | Disarankan |
 | **Postgres** | Baca schema dan SELECT | Jika project pakai Postgres |
 
-Flutter MCP / Playwright: di luar scope kit ini.
+Flutter MCP / Playwright browser automation: di luar scope kit ini (Playwright *sebagai perintah* boleh lewat RTK allowlist).
 
 Detail install CBM khusus Cursor + Windows: [../SETUP_AGENT_TOOLS.md](../SETUP_AGENT_TOOLS.md).
 
@@ -16,6 +17,7 @@ Detail install CBM khusus Cursor + Windows: [../SETUP_AGENT_TOOLS.md](../SETUP_A
 - Di config yang di-commit (`.mcp.json`), pakai `${ENV_VAR}` bila host mendukung.
 - Pairing dengan policy **database-readonly**: agent hanya SELECT.
 - User DB Postgres untuk AI: idealnya role **read-only**.
+- RTK: hanya perintah di allowlist; jangan anggap ini shell penuh (`bash` / `rm` / `sudo` ditolak).
 
 ## 1. Codebase Memory (CBM)
 
@@ -110,24 +112,123 @@ PGDATABASE=yourdb
 
 ### Uji
 
-`SELECT 1;` lalu minta agent menolak `DELETE` ? harus menolak sesuai policy.
+`SELECT 1;` lalu minta agent menolak `DELETE` — harus menolak sesuai policy.
 
-## 4. Troubleshooting
+## 4. RTK (`rtk-mcp`) — shell hemat token
+
+Upstream:
+- CLI filter: https://github.com/rtk-ai/rtk
+- MCP bridge: https://github.com/ousamabenyounes/rtk-mcp
+
+### Apa gunanya
+
+Agent menjalankan perintah lewat tool MCP `run_command`. Output CLI difilter oleh **RTK** sebelum masuk context LLM (sering hemat ~60–90%). Bukan pengganti CBM/MemPalace — pelengkap untuk `git` / `npm` / `docker` / dll.
+
+```text
+Cursor / Claude / …  →  rtk-mcp (run_command)  →  rtk <cmd>  →  output ringkas  →  LLM
+```
+
+Tanpa binary `rtk` di PATH: perintah tetap jalan (fallback mentah), tanpa hemat token.
+
+### Sekali per mesin
+
+Prasyarat: [Rust / Cargo](https://rustup.rs/).
+
+```bash
+# 1) Install RTK CLI
+cargo install --git https://github.com/rtk-ai/rtk
+rtk --version
+rtk gain
+
+# 2) Build MCP bridge
+git clone https://github.com/ousamabenyounes/rtk-mcp.git
+cd rtk-mcp
+cargo build --release
+```
+
+Binary tipikal Windows setelah `cargo install` / build:
+
+```text
+%USERPROFILE%\.cargo\bin\rtk.exe
+%USERPROFILE%\.cargo\bin\rtk-mcp.exe
+# atau: <clone>\rtk-mcp\target\release\rtk-mcp.exe
+```
+
+Pastikan `%USERPROFILE%\.cargo\bin` ada di PATH (biasanya sudah setelah rustup).
+
+Opsional (hemat token ekstra di sesi CLI): `rtk init -g` — hook global; terpisah dari MCP.
+
+### Daftarkan ke host
+
+**Cursor** — user MCP `%USERPROFILE%\.cursor\mcp.json` (atau project `.cursor/mcp.json`):
+
+```json
+"rtk": {
+  "command": "C:/Users/<USER>/.cargo/bin/rtk-mcp.exe"
+}
+```
+
+**Claude Code:**
+
+```bash
+claude mcp add --scope user rtk -- C:/Users/<USER>/.cargo/bin/rtk-mcp.exe
+```
+
+Atau edit `.mcp.json` (lihat `examples/mcp.example.json`).
+
+**OpenCode** — daftarkan command `rtk-mcp` yang sama di config MCP OpenCode.
+
+Restart host setelah menambah server.
+
+### Pemakaian (agent)
+
+| Parameter | Wajib? | Keterangan |
+|-----------|--------|------------|
+| `command` | Ya | Contoh: `git status`, `npm test`, `rtk --version` |
+| `cwd` | Tidak | Working directory absolut/relatif |
+
+Uji cepat di chat agent:
+
+1. `run_command` → `rtk --version` (harus versi, bukan "not found")
+2. `run_command` → `git status` (output ringkas)
+3. Perintah berbahaya / di luar allowlist (mis. `rm -rf /`) → ditolak server
+
+Jika RTK connected: prefer `run_command` untuk perintah allowlist, bukan shell mentah host (hemat token + allowlist).
+
+### Keamanan (ringkas)
+
+- **Allowlist saja** — contoh diizinkan: `git`, `cargo`, `npm`, `npx`, `pnpm`, `docker`, `grep`, `find`, `ls`, `cat`, `gh`, `curl`, `node`, `tsc`, `eslint`, `playwright`, `prisma`, `psql`, `make`, `tree`, …
+  Diblokir: `bash`, `sh`, `rm`, `sudo`, `chmod`, dan hampir semua yang tidak ada di daftar.
+- Parsing argumen lewat `shlex` (bukan split naif); panjang command dibatasi; eksekusi tanpa spawn shell interaktif.
+- Bukan pengganti policy **security** / **database-readonly**. `psql` lewat RTK tetap tunduk rule SELECT-only bila lewat MCP Postgres / kebijakan project.
+
+Daftar allowlist lengkap mengikuti rilis `rtk-mcp` — cek README upstream saat update.
+
+### Batasan praktis (Windows)
+
+- Beberapa proxy mengharapkan binary Unix (`ls`, `pwd`). Di Windows bisa gagal meski perintah ada di allowlist — pakai alternatif yang ada (`git`, `node`, atau tool file host).
+- Pesan "No hook installed — run `rtk init -g`" = peringatan opsional, bukan error MCP.
+
+## 5. Troubleshooting
 
 | Gejala | Cek |
 |--------|-----|
 | MCP merah / failed | Path binary absolut; jalankan command manual; restart host |
-| command not found | PATH belum ke-load ? restart IDE/CLI |
+| command not found | PATH belum ke-load — restart IDE/CLI |
 | Index aneh | Path root salah; re-index; cek monorepo root |
 | MemPalace kosong saat lanjut | Wing/room beda; keyword lain; mungkin `[NO-MEMORY]` |
 | Agent tetap mau tulis DB | Policy belum ter-load di host itu |
 | Secret di git | Putar password; pindah ke env |
 | OpenCode tidak baca policy | Cek `opencode.json` `instructions` |
 | Claude tidak lihat CLAUDE.md | `/context`; file di root atau `.claude/CLAUDE.md` |
+| `rtk-mcp` gagal start | `rtk --version` di terminal yang sama; path ke `rtk-mcp.exe` absolut; nama bentrok binary lain bernama `rtk` |
+| `run_command` ditolak / not allowlisted | Perintah di luar allowlist — pecah jadi perintah yang diizinkan, atau jalankan manual di luar MCP |
+| Output tidak hemat token | `rtk` tidak di PATH → fallback mentah; install/perbaiki PATH lalu restart host |
+| `ls` / `pwd` gagal di Windows | Lihat batasan Windows di atas; bukan berarti RTK rusak |
 
-## 5. Urutan setelah tugas selesai
+## 6. Urutan setelah tugas selesai
 
 1. Selesai fitur/fix + tes relevan
-2. Session bermakna? ? MemPalace checkpoint
-3. Perlu re-index? ? CBM `index_repository`
-4. Laporkan 1 baris: `Memory: skip ?` / `Session: checkpoint ?` / `re-index ?`
+2. Session bermakna? — MemPalace checkpoint
+3. Perlu re-index? — CBM `index_repository`
+4. Laporkan 1 baris: `Memory: skip ✓` / `Session: checkpoint ✓` / `re-index ✓`

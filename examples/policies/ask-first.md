@@ -27,3 +27,7 @@ Untuk permintaan yang mengubah kode, DB, config, atau alur kerja:
 - Pertanyaan informasi saja
 - User bilang: "langsung kerjakan", "jangan tanya", "pakai default"
 - Typo / 1 baris yang sudah sangat jelas
+
+## Setup pertama / multi-provider
+
+Untuk pasang policy, adapter Cursor/Claude/OpenCode/Codex, alur vibe MVP, atau stack cursorrules: ikuti juga `first-setup.md` (konfirmasi perlu/tidak + provider mana) sebelum menyentuh file.

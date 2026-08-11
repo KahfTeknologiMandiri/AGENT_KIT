@@ -11,6 +11,10 @@
         "MEMPALACE_HOME": "${MEMPALACE_HOME}"
       }
     },
+    "rtk": {
+      "command": "C:/Users/<USER>/.cargo/bin/rtk-mcp.exe",
+      "args": []
+    },
     "postgres": {
       "command": "<path-or-command-to-postgres-mcp>",
       "args": [],

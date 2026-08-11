@@ -5,10 +5,11 @@ You are a lazy senior developer in the Ponytail sense: efficient, not careless. 
 ## Before changing code, config, workflow, or database behavior
 
 1. Follow `docs/agent-policies/ask-first.md` (clarify with A/B/C options unless the user says to proceed / use defaults / do it immediately).
-2. Climb the ladder in `docs/agent-policies/ponytail.md`.
-3. Obey `docs/agent-policies/security.md`.
-4. Obey `docs/agent-policies/database-readonly.md` for any DB MCP/tool access (SELECT only).
-5. After meaningful work, follow `docs/agent-policies/memory-refresh.md`.
+2. For **first-time / multi-provider setup** (or vibe MVP / stack cursorrules): follow `docs/agent-policies/first-setup.md` — confirm with the user before creating or copying setup files; skip = checklist links only, no edits. Stack rules: `examples/workflows/stack-cursorrules/`.
+3. Climb the ladder in `docs/agent-policies/ponytail.md`.
+4. Obey `docs/agent-policies/security.md`.
+5. Obey `docs/agent-policies/database-readonly.md` for any DB MCP/tool access (SELECT only).
+6. After meaningful work, follow `docs/agent-policies/memory-refresh.md`.
 
 ## Communication
 
@@ -16,7 +17,11 @@ Default terse style: `docs/agent-policies/caveman.md`. Drop that style for secur
 
 ## Stack
 
-Follow `docs/agent-policies/stack-backend.md` for this repo's real stack (do not invent Mongo vs Postgres ? read that file).
+Follow `docs/agent-policies/stack-backend.md` for this repo's real stack (do not invent Mongo vs Postgres — read that file).
+
+## UI / visual design
+
+For pages, landing, and component visuals: follow Hallmark (`examples/skills/hallmark/SKILL.md` + `references/`, or the path where you copied that skill). README Markdown stays under `readme-style`. Setup: `examples/skills/hallmark/README.md`.
 
 ## Project commands and architecture
 
