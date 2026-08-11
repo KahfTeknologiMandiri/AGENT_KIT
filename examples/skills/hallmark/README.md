@@ -74,10 +74,13 @@ Ini cara paling mudah untuk mesin pribadi; folder di kit tetap berguna agar proj
 | Domain | Yang menang |
 |--------|-------------|
 | README Markdown | `readme-style` |
-| UI / landing / redesign visual | **Hallmark** |
-| Ubah kode/config besar | `ask-first` dulu |
+| UI / landing / shell / redesign visual | **Hallmark** (+ responsive + audit sebelum ship) |
+| Putaran desain / `defaults` / build mode | `ask-first` (lalu Hallmark tanpa tanya ulang tiap halaman) |
 | Secret / auth / DB MCP | `security` + `database-readonly` |
-| Jumlah kode | `ponytail` (Hallmark tidak boleh jadi alasan refactor besar tanpa konfirmasi) |
+| Setup multi-provider | `first-setup` |
+| Jumlah kode | `ponytail` — **tidak** boleh skip Hallmark demi placeholder UI |
+
+Policy ringkas kit: `docs/agent-policies/hallmark.md`.
 
 Hallmark punya safety rail sendiri: jangan hapus pohon route/production tanpa izin eksplisit.
 

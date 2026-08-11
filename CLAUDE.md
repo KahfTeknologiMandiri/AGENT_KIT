@@ -33,6 +33,7 @@ examples/workflows/stack-cursorrules → optional PatrickJS rules matched to tec
 - Entry docs: `CHECKLIST-NEW-PROJECT.md`, `PROVIDER-MAPPING.md`, `MCP-SETUP.md`, `RULES-CATALOG.md`
 - Portable examples: `examples/` (policies + `skills/hallmark/` + `workflows/`)
 - Active project policies: `docs/agent-policies/` (includes `first-setup.md`)
+- Vibe pointer: `docs/workflows/vibe-mvp.md` (stack cursorrules setelah PRD)
 - UI skill: `examples/skills/hallmark/` (see its README for Cursor / Claude / Codex / OpenCode)
 
 ## Agent notes
@@ -42,5 +43,6 @@ examples/workflows/stack-cursorrules → optional PatrickJS rules matched to tec
 - First-time / multi-provider setup: confirm via `docs/agent-policies/first-setup.md` before copying files.
 - Stack cursorrules: `examples/workflows/stack-cursorrules/` — max 5–7; kit policies win over external rules.
 - DB via MCP: read-only (see `docs/agent-policies/database-readonly.md`).
-- UI/landing: Hallmark (`examples/skills/hallmark/SKILL.md`); README prose: `readme-style`.
+- UI/landing/shell: Hallmark (`docs/agent-policies/hallmark.md` + `examples/skills/hallmark/SKILL.md`) — responsive + audit; README prose: `readme-style`.
+- Ask-first: putaran desain untuk UI; **build mode** setelah PRD+Tech Design disetujui (kerja sampai DoD, jangan tanya per modul).
 - After meaningful work: MemPalace checkpoint; re-index CBM only when kit structure changes a lot or `[REINDEX]`.

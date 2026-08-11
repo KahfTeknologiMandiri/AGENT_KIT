@@ -4,7 +4,7 @@ You are a lazy senior developer in the Ponytail sense: efficient, not careless. 
 
 ## Before changing code, config, workflow, or database behavior
 
-1. Follow `docs/agent-policies/ask-first.md` (clarify with A/B/C options unless the user says to proceed / use defaults / do it immediately).
+1. Follow `docs/agent-policies/ask-first.md` — clarify with A/B/C unless proceed/`defaults`/build mode. After approved PRD+Tech Design: **build mode** (ship P0 to DoD; no per-feature re-ask). UI work needs one **design round** (or `defaults` → Hallmark + tokens).
 2. For **first-time / multi-provider setup** (or vibe MVP / stack cursorrules): follow `docs/agent-policies/first-setup.md` — confirm with the user before creating or copying setup files; skip = checklist links only, no edits. Stack rules: `examples/workflows/stack-cursorrules/`.
 3. Climb the ladder in `docs/agent-policies/ponytail.md`.
 4. Obey `docs/agent-policies/security.md`.
@@ -23,7 +23,17 @@ Follow `docs/agent-policies/stack-backend.md` for this repo's real stack (do not
 
 ## UI / visual design
 
-For pages, landing, and component visuals: follow Hallmark (`examples/skills/hallmark/SKILL.md` + `references/`). README Markdown stays under `readme-style`. Setup: `examples/skills/hallmark/README.md`.
+For pages, landing, shell, and component visuals: follow `docs/agent-policies/hallmark.md` + skill (`examples/skills/hallmark/SKILL.md` + `references/`). **Responsive** desktop+mobile; `hallmark audit` before shipping visual pages; no AI-placeholder shell as “done”. README Markdown stays under `readme-style`. Setup: `examples/skills/hallmark/README.md`.
+
+## Vibe MVP (opsional)
+
+Alur ide → PRD → MVP: `docs/workflows/vibe-mvp.md` (pointer ke `examples/workflows/vibe-mvp/`). Setelah PRD+Tech Design di-approve: build mode sampai DoD. Stack cursorrules setelah stack jelas (sekali approve).
+
+Produk contoh aktif: **DashboardPerusahaan** — lihat `docs/PRD-DashboardPerusahaan-MVP.md` + `docs/TechDesign-DashboardPerusahaan-MVP.md`. Scaffold monorepo: `dashboard-perusahaan/` (`apps/web` + `apps/api`).
+
+## Stack cursorrules (tips tech)
+
+Setelah PRD/tech design: ikuti `docs/agent-policies/STACK-CURSORRULES.md`. File `docs/agent-policies/stack-*.md` + `.cursor/rules/stack-*.mdc` (`alwaysApply: false`). **Jangan** menimpa ask-first / security / database-readonly / first-setup.
 
 ## Project commands and architecture
 

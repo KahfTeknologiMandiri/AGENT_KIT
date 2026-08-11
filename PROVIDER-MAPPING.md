@@ -76,9 +76,10 @@ Salin `SKILL.md` + `references/` dari `examples/skills/hallmark/`, atau `npx ski
 2. OpenCode: jika `AGENTS.md` dan `CLAUDE.md` ada, biasanya AGENTS yang dipakai — pastikan lengkap.
 3. Saat putaran klarifikasi (ask-first / first-setup), prioritaskan kejelasan (normal mode); caveman boleh kembali setelah arah jelas.
 4. Database read-only = MCP/ad-hoc. Migrasi SQL = jalur manusia/CI.
-5. **Hallmark vs readme-style:** UI/visual → Hallmark; README Markdown → readme-style. Jangan biarkan Hallmark menimpa ask-first/security/first-setup.
-6. **first-setup:** sebelum apply multi-provider, vibe, atau stack cursorrules, wajib konfirmasi user; jangan pasang adapter untuk tool yang tidak dipilih.
-7. **Stack cursorrules vs kit inti:** tips tech dari awesome-cursorrules **tidak** boleh menimpa ask-first / security / ponytail / database-readonly / first-setup / memory-refresh. Prefer `alwaysApply: false` + globs sempit. Alur: [examples/workflows/stack-cursorrules/](examples/workflows/stack-cursorrules/).
+5. **Hallmark vs readme-style:** UI/visual → Hallmark (policy `hallmark.md` + skill; responsive + audit); README Markdown → readme-style. Hormati build mode / `defaults` desain di ask-first; jangan biarkan placeholder AI menjadi “selesai”.
+6. **Ask-first build mode:** setelah PRD+Tech Design disetujui, eksekusi P0 sampai DoD tanpa tanya ulang per modul (kecuali blocker).
+7. **first-setup:** sebelum apply multi-provider, vibe, atau stack cursorrules, wajib konfirmasi user; jangan pasang adapter untuk tool yang tidak dipilih.
+8. **Stack cursorrules vs kit inti:** tips tech dari awesome-cursorrules **tidak** boleh menimpa ask-first / security / ponytail / database-readonly / first-setup / memory-refresh. Prefer `alwaysApply: false` + globs sempit. Alur: [examples/workflows/stack-cursorrules/](examples/workflows/stack-cursorrules/).
 
 ## G. Di luar kit ini
 

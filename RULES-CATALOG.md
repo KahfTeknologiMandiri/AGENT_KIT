@@ -4,9 +4,9 @@ Setiap rule di bawah berasal dari pola Koala. Versi portable (tanpa frontmatter 
 
 ## 1. Tanya dulu (`ask-first`)
 
-**Analogi:** Sebelum renovasi rumah, tukang tanya dulu warna dan ruangan mana.
+**Analogi:** Sebelum renovasi rumah, tukang tanya dulu warna dan ruangan mana. Setelah denah disetujui, jangan tanya ulang tiap bata.
 
-**Tujuan:** Cegah kerja besar yang salah arah.
+**Tujuan:** Cegah kerja besar yang salah arah — tanpa menghambat eksekusi setelah rencana jelas.
 
 **Wajib sebelum ubah kode / DB / config / alur:**
 1. Jangan langsung edit atau perintah besar.
@@ -14,10 +14,14 @@ Setiap rule di bawah berasal dari pola Koala. Versi portable (tanpa frontmatter 
 3. Tunggu jawaban atau `defaults`.
 4. Ringkas pemahaman 2–3 kalimat bahasa awam, baru kerja.
 
-**Boleh langsung:** pertanyaan info saja; user bilang "langsung kerjakan" / "jangan tanya" / "pakai default"; typo 1 baris yang sangat jelas.
+**Putaran desain (ada UI):** brand, tone, referensi opsional, responsive — atau `defaults` = Hallmark + tokens.
 
-**File Koala:** `.cursor/rules/tanya-dulu-sebelum-kerja.mdc`  
-**Portable:** `examples/policies/ask-first.md`
+**Build mode:** PRD + Tech Design sudah disetujui → kerjakan P0 sampai DoD; jangan tanya ulang per modul (kecuali blocker keamanan/destruktif/domain besar).
+
+**Boleh langsung:** pertanyaan info saja; "langsung kerjakan" / "jangan tanya" / `defaults`; typo 1 baris; build mode aktif.
+
+**Cursor (kit ini):** `.cursor/rules/ask-first.mdc`  
+**Portable:** `examples/policies/ask-first.md` · aktif: `docs/agent-policies/ask-first.md`
 
 ## 1b. Setup pertama (`first-setup`)
 
@@ -127,14 +131,17 @@ README seperti landing page; contoh kerja di 5 baris pertama; tabel fitur; Quick
 
 **Analogi:** Bukan cuma ganti cat; bedakan kerangka rumah supaya tidak semua halaman AI keliatan sama.
 
-**Tujuan:** UI/landing/komponen visual tidak jatuh ke default AI slop (template hero + 3 kartu + CTA yang sama terus).
+**Tujuan:** UI/landing/shell/komponen visual tidak jatuh ke default AI slop; **responsive** desktop+mobile; audit sebelum ship.
+
+**Gerbang:** baca skill penuh sebelum tulis UI; larang ship placeholder AI sebagai “selesai”; Ponytail tidak mengizinkan skip Hallmark pada UI user-facing.
 
 **Verb:** default build · `hallmark audit` (skor, tanpa edit) · `hallmark redesign` · `hallmark study` (screenshot/URL).
 
-**Bukan untuk:** isi README Markdown (tetap pakai `readme-style`). Tetap tunduk `ask-first` / `security` / `ponytail`.
+**Bukan untuk:** isi README Markdown (tetap pakai `readme-style`). Security / first-setup / DB RO tetap menang. Hormati build mode + `defaults` desain di `ask-first`.
 
-**Portable:** `examples/skills/hallmark/` (`SKILL.md` + `references/` + README setup)
-**Cursor (kit ini):** `.cursor/rules/hallmark.mdc` (`alwaysApply: true` = bridge; baca skill penuh dari `examples/skills/hallmark/`)
+**Policy ringkas:** `docs/agent-policies/hallmark.md` · portable: `examples/policies/hallmark.md`  
+**Skill:** `examples/skills/hallmark/` (`SKILL.md` + `references/` + README setup)  
+**Cursor:** `.cursor/rules/hallmark.mdc` (`alwaysApply: true` = bridge)  
 Upstream: https://github.com/Nutlope/hallmark · demo: https://www.usehallmark.com/
 
 ## File root terkait
