@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "codebase-memory-mcp": {
+      "command": "C:/Users/<USER>/.local/bin/codebase-memory-mcp.exe",
+      "args": []
+    },
+    "mempalace": {
+      "command": "<path-or-command-to-mempalace-mcp>",
+      "args": [],
+      "env": {
+        "MEMPALACE_HOME": "${MEMPALACE_HOME}"
+      }
+    },
+    "postgres": {
+      "command": "<path-or-command-to-postgres-mcp>",
+      "args": [],
+      "env": {
+        "PGHOST": "${PGHOST}",
+        "PGPORT": "${PGPORT}",
+        "PGUSER": "${PGUSER}",
+        "PGPASSWORD": "${PGPASSWORD}",
+        "PGDATABASE": "${PGDATABASE}"
+      }
+    }
+  }
+}

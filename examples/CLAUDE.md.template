@@ -1,0 +1,52 @@
+# CLAUDE.md
+
+Guidance for Claude Code and other agents working in this repository.
+
+## Project
+
+<!-- One paragraph: product name, who uses it, main platforms. -->
+
+**NAME** ? short description. Client: <!-- Flutter / web -->. API: <!-- Node/Express -->. Database: <!-- PostgreSQL -->.
+
+Also follow root `AGENTS.md` and everything under `docs/agent-policies/`.
+
+## Commands
+
+### Backend
+
+```bash
+cd server
+npm install
+npm run dev
+```
+
+### Frontend (if any)
+
+```bash
+# flutter pub get
+# flutter analyze
+# flutter test test/path_test.dart
+```
+
+### Database
+
+```bash
+# npm run db:migrate
+# npm run db:migrate:status
+```
+
+## Architecture (short)
+
+```text
+Client --> API --> Database
+```
+
+- Entry point: <!-- path -->
+- Auth: <!-- JWT -->
+- Important shared flows: <!-- e.g. approval workflow -->
+
+## Agent notes
+
+- Do not launch mobile/web apps unless asked.
+- Never put secrets in git. Use env vars.
+- DB via MCP: read-only (see `docs/agent-policies/database-readonly.md`).
