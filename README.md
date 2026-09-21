@@ -31,13 +31,56 @@ Salin itu di **repo aplikasi**. Repo git Agent Kit ini bukan tempatnya.
 
 ## Mulai cepat
 
-Ini untuk **repo aplikasi**. Checkbox lengkap ada di [CHECKLIST-NEW-PROJECT.md](CHECKLIST-NEW-PROJECT.md).
+Kerjakan di **repo aplikasi**, bukan di git kit. Checkbox lengkap: [CHECKLIST-NEW-PROJECT.md](CHECKLIST-NEW-PROJECT.md).
 
-1. Jangan minta AI menginstal sendiri. Ia harus tanya dulu lewat `first-setup`: Ya, Tidak, atau Nanti.
-2. Salin `examples/policies/` ke `docs/agent-policies/` dengan perintah di atas.
-3. Pilih satu stack: `stack-backend.postgres.example.md` **atau** `stack-backend.mongo.example.md`. Rename jadi `stack-backend.md`.
-4. Salin `examples/AGENTS.md` ke `AGENTS.md`. Isi `CLAUDE.md` dari `examples/CLAUDE.md.template`.
-5. Pasang plugin Superpowers di **setiap** host yang kamu pakai:
+Sama di semua OS, langkah 0: jangan minta AI menginstal sendiri. Ia harus tanya dulu lewat `first-setup`: Ya, Tidak, atau Nanti.
+
+Kalau kit sudah di-vendor sebagai `docs/agent-kit/`, ganti `path/ke/agent-kit` (atau `path\ke\agent-kit`) jadi `docs/agent-kit`. WSL ikut Linux.
+
+Pilih **satu** stack: postgres **atau** mongo. Jangan rename keduanya.
+
+### Windows (PowerShell)
+
+`cd` ke folder repo aplikasi, lalu:
+
+```text
+Copy-Item -Recurse path\ke\agent-kit\examples\policies docs\agent-policies
+Rename-Item docs\agent-policies\stack-backend.postgres.example.md stack-backend.md
+Copy-Item path\ke\agent-kit\examples\AGENTS.md AGENTS.md
+Copy-Item path\ke\agent-kit\examples\CLAUDE.md.template CLAUDE.md
+```
+
+Kalau projectmu Mongo, ganti `postgres` jadi `mongo` di baris `Rename-Item`. Lanjut ke Plugin di bawah.
+
+### Linux
+
+`cd` ke folder repo aplikasi, lalu:
+
+```text
+cp -R path/ke/agent-kit/examples/policies docs/agent-policies
+mv docs/agent-policies/stack-backend.postgres.example.md docs/agent-policies/stack-backend.md
+cp path/ke/agent-kit/examples/AGENTS.md AGENTS.md
+cp path/ke/agent-kit/examples/CLAUDE.md.template CLAUDE.md
+```
+
+Kalau projectmu Mongo, ganti `postgres` jadi `mongo` di baris `mv`. Lanjut ke Plugin di bawah.
+
+### macOS
+
+Buka Terminal.app, `cd` ke folder repo aplikasi, lalu:
+
+```text
+cp -R path/ke/agent-kit/examples/policies docs/agent-policies
+mv docs/agent-policies/stack-backend.postgres.example.md docs/agent-policies/stack-backend.md
+cp path/ke/agent-kit/examples/AGENTS.md AGENTS.md
+cp path/ke/agent-kit/examples/CLAUDE.md.template CLAUDE.md
+```
+
+Kalau projectmu Mongo, ganti `postgres` jadi `mongo` di baris `mv`. Path pakai `/`, bukan `\`. Lanjut ke Plugin di bawah.
+
+### Plugin dan MCP (semua OS)
+
+1. Pasang plugin Superpowers di **setiap** host yang kamu pakai:
 
 ```text
 Cursor: di Agent chat `/add-plugin superpowers` (atau cari “superpowers” di marketplace plugin)
@@ -46,7 +89,7 @@ OpenCode: `opencode.json` → `"plugin": ["superpowers@git+https://github.com/ob
 Codex App: Plugins → Superpowers. Codex CLI: `/plugins` → search `superpowers` → Install
 ```
 
-6. Kalau project punya UI, pasang Figma juga. Tanpa MCP Figma, UI baru harus berhenti.
+2. Kalau project punya UI, pasang Figma juga. Tanpa MCP Figma, UI baru harus berhenti.
 
 ```text
 Cursor: `/add-plugin figma` lalu OAuth
@@ -55,8 +98,8 @@ Codex App: plugin Figma. CLI: `codex mcp add figma --url https://mcp.figma.com/m
 OpenCode: remote OAuth **belum** di katalog Figma — kerja UI di host ini **berhenti** sampai Figma allowlist; jangan PAT; Desktop MCP bukan generate
 ```
 
-7. MCP yang disarankan: CBM, MemPalace, Claude Mem, dan RTK. Tambah Postgres kalau projectmu memang Postgres. Perintah lengkap ada di [MCP-SETUP.md](MCP-SETUP.md).
-8. Buka chat agen baru, lalu uji perilaku di CHECKLIST §D.
+3. MCP yang disarankan: CBM, MemPalace, Claude Mem, dan RTK. Tambah Postgres kalau projectmu memang Postgres. Per OS: [MCP-SETUP.md](MCP-SETUP.md).
+4. Buka chat agen baru, lalu uji perilaku di CHECKLIST §D.
 
 Stack cursorrules (maksimal 5–7 rule) boleh, setelah kamu konfirmasi. Bukan langkah wajib.
 

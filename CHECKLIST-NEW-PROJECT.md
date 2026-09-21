@@ -26,6 +26,8 @@ Stack cursorrules opsional: `examples/workflows/stack-cursorrules/`.
 
 ## A. Siapkan file kebijakan (15 menit)
 
+Perintah copy-paste per OS (Windows / Linux / macOS): README **Mulai cepat**.
+
 ```text
 [ ] Buat folder docs/agent-policies/
 [ ] Salin isi dari Agent Kit `examples/policies/` → `docs/agent-policies/`
