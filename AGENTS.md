@@ -31,7 +31,7 @@ For pages, landing, shell, and component visuals: follow `examples/policies/hall
 
 ## Superpowers (fitur / bug)
 
-Overlay: `examples/policies/superpowers.md`. Pasang plugin per host (CHECKLIST / PROVIDER-MAPPING). Jangan vendor skill ke repo ini.
+Overlay: `examples/policies/superpowers.md`. Pasang plugin per host (CHECKLIST / PROVIDER-MAPPING). Jangan vendor skill ke repo ini. Skill wajib termasuk `using-superpowers` (daftar lengkap di overlay).
 
 ## Stack cursorrules (tips tech)
 

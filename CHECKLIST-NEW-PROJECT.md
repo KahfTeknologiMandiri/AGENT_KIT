@@ -36,7 +36,7 @@ Stack cursorrules opsional: `examples/workflows/stack-cursorrules/`.
 
 ## A2. Superpowers plugin (wajib)
 
-Pasang **per host** yang dipilih di §0. Perintah dari [obra/superpowers](https://github.com/obra/superpowers) — jangan invent.
+Pasang **per host** yang dipilih di §0. Perintah dari [obra/superpowers](https://github.com/obra/superpowers) — jangan invent. Overlay mewajibkan skill termasuk `using-superpowers`.
 
 ```text
 [ ] Cursor: di Agent chat `/add-plugin superpowers` (atau cari “superpowers” di marketplace plugin)
