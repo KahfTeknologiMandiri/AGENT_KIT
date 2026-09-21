@@ -53,6 +53,8 @@ Boleh gabung: 1 + 2 (policy + rule stack).
 
 Superpowers **bukan** menu. Plugin wajib dicentang di checklist untuk setiap host yang dipilih.
 
+Figma MCP **bukan** menu. Plugin/MCP resmi wajib dicentang di checklist untuk setiap host yang dipilih (kerja UI). Perintah: CHECKLIST / MCP-SETUP / PROVIDER-MAPPING. Jangan invent token.
+
 ### C. Provider mana yang dipakai? (boleh lebih dari satu)
 
 Tanya eksplisit; **jangan pasang adapter untuk tool yang tidak dipilih**.
@@ -98,6 +100,7 @@ Sesuaikan provider yang dipilih:
 - Cursor: `.cursor/rules/superpowers.mdc` (`alwaysApply: true`) di **app** mengarah ke overlay, bukan isi skill
 - Claude Code: `/context` menampilkan instruksi
 - Semua host yang dipilih: plugin Superpowers terpasang; overlay `superpowers.md` ikut tersalin
+- Semua host yang dipilih: overlay `figma.md` ikut tersalin; Cursor app: `.cursor/rules/figma.mdc` (`alwaysApply: true`) mengarah ke overlay, bukan skill Figma. MCP Figma: CHECKLIST §A3. OpenCode: remote Figma belum katalog — UI berhenti (jangan PAT)
 - OpenCode: fitur baru → Superpowers (bukan diff langsung); config/rename boleh `ask-first`
 - Codex / generic: “ikuti AGENTS.md”
 

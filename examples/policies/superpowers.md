@@ -31,15 +31,16 @@ Skill Superpowers lain (worktree, review, subagent, writing-skills, …) opsiona
 1. `security`, `database-readonly`, `first-setup` — selalu. Superpowers tidak boleh skip konfirmasi setup, secret di git, atau tulis DB lewat MCP.
 2. Fitur / bug / multi-langkah — tujuh skill di atas.
 3. `ask-first` — hanya first-setup dan kerja **non-fitur** (config, rename). Typo 1 baris tetap langsung. Bukan 3–7 A/B/C untuk fitur baru.
-4. Ponytail — ukuran diff. Tidak skip TDD.
-5. Hallmark — setelah spec, untuk halaman visual user-facing + `hallmark audit` sebelum ship.
-6. Caveman — lepas saat brainstorm / spec / plan review. Balik setelah eksekusi mulai. Security / aksi irreversible / user bingung: selalu lepas.
+4. Ponytail — ukuran diff. Tidak skip TDD. Tidak skip Figma atau Hallmark pada UI user-facing.
+5. Figma (`figma.md`) — setelah spec, sumber visual (MCP + frame di-approve) sebelum tulis UI. MCP absen → berhenti, bukan catalog Hallmark.
+6. Hallmark — kualitas + `hallmark audit` sebelum ship; jangan ganti makrostruktur Figma yang di-approve.
+7. Caveman — lepas saat brainstorm / spec / plan review. Balik setelah eksekusi mulai. Security / aksi irreversible / user bingung: selalu lepas.
 
 ## Spec dan plan
 
 Ikuti path plugin yang terpasang (default app: `docs/superpowers/specs/`, plans). Jangan invent root spec kit untuk app.
 
-**Build mode:** user sudah approve **spec dan plan** Superpowers → eksekusi sampai DoD (`executing-plans` + TDD). Jangan tanya ulang per modul. Bukan PRD KhazP / vibe-MVP.
+**Build mode:** user sudah approve **spec dan plan** Superpowers → eksekusi sampai DoD (`executing-plans` + TDD). Jangan tanya ulang per modul. Bukan PRD KhazP / vibe-MVP. UI: tetap `figma.md` (node di-approve per permukaan baru) lalu Hallmark.
 
 ## Refresh plugin
 
