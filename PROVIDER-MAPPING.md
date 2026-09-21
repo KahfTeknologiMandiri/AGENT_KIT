@@ -1,6 +1,10 @@
 # Mapping provider ? file ditaruh di mana
 
-Satu kebijakan, banyak pintu. Salin isi dari `examples/policies/`, lalu mapping ke lokasi di bawah.
+Satu kebijakan, banyak pintu.
+
+**Repo Agent Kit:** sumber = `examples/policies/`. Jangan mapping ke `docs/` atau `.cursor/` di dalam kit.
+
+**Repo aplikasi:** salin isi dari `examples/policies/`, lalu mapping ke lokasi di bawah.
 
 ## Tabel cepat
 
@@ -11,6 +15,7 @@ Satu kebijakan, banyak pintu. Salin isi dari `examples/policies/`, lalu mapping 
 | Tanya dulu, caveman, security, memory, DB RO | `.cursor/rules/<nama>.mdc` (`alwaysApply: true`) | Sertakan lewat `CLAUDE.md` "Also follow …" atau file di `.claude/` | `opencode.json` → `instructions: ["docs/agent-policies/*.md"]` | Gabungkan ringkas ke `AGENTS.md` atau folder `docs/agent-policies/` |
 | Perintah build dan arsitektur | Opsional di rule terpisah | **`CLAUDE.md`** | Boleh di `AGENTS.md` atau `instructions` | `AGENTS.md` / `CLAUDE.md` |
 | Hallmark (UI anti-slop) | `.cursor/rules/hallmark.mdc` (`alwaysApply: true`) + skill di `examples/skills/hallmark/` (atau path salinan project) | `~/.claude/skills/hallmark/` atau skills project; pointer di `CLAUDE.md` | Pointer di `AGENTS.md` / `instructions` ke `skills/hallmark/SKILL.md` | Salin `SKILL.md` + `references/`; atau `npx skills add nutlope/hallmark` |
+| Superpowers (proses fitur/bug) | `.cursor/rules/superpowers.mdc` (`alwaysApply: true`) = overlay `docs/agent-policies/superpowers.md` (bukan skill). Plugin: `/add-plugin superpowers` | Plugin: `/plugin install superpowers@claude-plugins-official`. Overlay lewat `CLAUDE.md` / `docs/agent-policies/superpowers.md` | `opencode.json` `"plugin": ["superpowers@git+https://github.com/obra/superpowers.git"]` + overlay di `instructions` / `AGENTS.md` | Overlay `docs/agent-policies/superpowers.md`; pasang plugin di host yang benar-benar dipakai |
 | MCP MemPalace / CBM / RTK / Postgres | User: `~/.cursor/mcp.json` | Project: `.mcp.json` atau `claude mcp add` | Config MCP OpenCode | Sesuai host |
 
 ## A. Generic (paling portable)
@@ -33,6 +38,7 @@ Di `AGENTS.md`, arahkan ke `docs/agent-policies/*.md`.
 4. Buka **Agent chat baru** setelah menambah rule.
 5. Edit memory-refresh: ganti path/scope agar cocok project baru.
 6. **Hallmark:** salin `examples/skills/hallmark/` ke project (atau pakai path kit), tambah `.cursor/rules/hallmark.mdc` yang mengarah ke `SKILL.md` itu. Detail: [examples/skills/hallmark/README.md](examples/skills/hallmark/README.md).
+7. **Superpowers:** pasang plugin (`/add-plugin superpowers`). Tambah `.cursor/rules/superpowers.mdc` (`alwaysApply: true`) yang berisi/mengarah ke overlay `docs/agent-policies/superpowers.md`. Jangan tempel tubuh skill Superpowers ke `.mdc`.
 
 ## C. Claude Code
 
@@ -41,6 +47,8 @@ Di `AGENTS.md`, arahkan ke `docs/agent-policies/*.md`.
 | Instruksi project | `./CLAUDE.md` atau `./.claude/CLAUDE.md` |
 | Preferensi pribadi | `~/.claude/CLAUDE.md` |
 | Hallmark skill | `~/.claude/skills/hallmark/` (salin dari `examples/skills/hallmark/`) atau `npx skills add nutlope/hallmark` |
+| Superpowers plugin | `/plugin install superpowers@claude-plugins-official` |
+| Superpowers overlay | `docs/agent-policies/superpowers.md` + pointer di `AGENTS.md` / `CLAUDE.md` |
 | MCP team-shared | `.mcp.json` di root (commit) |
 | MCP pribadi | `claude mcp add --scope user` |
 
@@ -56,12 +64,14 @@ Docs: https://code.claude.com/docs/en/claude-md · https://code.claude.com/docs/
 | Rules global | `~/.config/opencode/AGENTS.md` |
 | Banyak file policy | `opencode.json` → `instructions` |
 | Hallmark | Pointer ke `skills/hallmark/SKILL.md` (jangan wajib-load tiap chat jika file besar — load saat kerja UI) |
+| Superpowers plugin | `"plugin": ["superpowers@git+https://github.com/obra/superpowers.git"]` di `opencode.json`; restart |
+| Superpowers overlay | Pointer ke `docs/agent-policies/superpowers.md` |
 
 Contoh: lihat `examples/opencode.json.example`. Init: `/init`.
 
 Docs: https://opencode.ai/docs/rules
 
-## E. Codex (Hallmark)
+## E. Codex
 
 | Scope | Lokasi |
 |-------|--------|
@@ -70,20 +80,27 @@ Docs: https://opencode.ai/docs/rules
 
 Salin `SKILL.md` + `references/` dari `examples/skills/hallmark/`, atau `npx skills add nutlope/hallmark`.
 
+### Superpowers
+
+- App: Plugins → Superpowers (marketplace).
+- CLI: `/plugins` → search `superpowers` → Install Plugin.
+- Overlay: `docs/agent-policies/superpowers.md` (salinan dari kit).
+
 ## F. Konflik dan prioritas
 
-1. Satu sumber di `docs/agent-policies/`; file lain hanya merujuk.
+1. Satu sumber di app: `docs/agent-policies/`; file lain hanya merujuk. Di repo kit: `examples/policies/`.
 2. OpenCode: jika `AGENTS.md` dan `CLAUDE.md` ada, biasanya AGENTS yang dipakai — pastikan lengkap.
 3. Saat putaran klarifikasi (ask-first / first-setup), prioritaskan kejelasan (normal mode); caveman boleh kembali setelah arah jelas.
 4. Database read-only = MCP/ad-hoc. Migrasi SQL = jalur manusia/CI.
-5. **Hallmark vs readme-style:** UI/visual → Hallmark (policy `hallmark.md` + skill; responsive + audit); README Markdown → readme-style. Hormati build mode / `defaults` desain di ask-first; jangan biarkan placeholder AI menjadi “selesai”.
-6. **Ask-first build mode:** setelah PRD+Tech Design disetujui, eksekusi P0 sampai DoD tanpa tanya ulang per modul (kecuali blocker).
-7. **first-setup:** sebelum apply multi-provider, vibe, atau stack cursorrules, wajib konfirmasi user; jangan pasang adapter untuk tool yang tidak dipilih.
-8. **Stack cursorrules vs kit inti:** tips tech dari awesome-cursorrules **tidak** boleh menimpa ask-first / security / ponytail / database-readonly / first-setup / memory-refresh. Prefer `alwaysApply: false` + globs sempit. Alur: [examples/workflows/stack-cursorrules/](examples/workflows/stack-cursorrules/).
+5. **Hallmark vs readme-style:** UI/visual → Hallmark (policy `hallmark.md` + skill; responsive + audit) **setelah** spec Superpowers; README Markdown → readme-style. Jangan biarkan placeholder AI menjadi “selesai”.
+6. **Build mode:** setelah spec **dan** plan Superpowers disetujui, eksekusi P0 sampai DoD tanpa tanya ulang per modul (kecuali blocker).
+7. **first-setup:** sebelum apply multi-provider atau stack cursorrules, wajib konfirmasi user; jangan pasang adapter untuk tool yang tidak dipilih. Superpowers plugin wajib di checklist, bukan opsi vibe.
+8. **Stack cursorrules vs kit inti:** tips tech dari awesome-cursorrules **tidak** boleh menimpa Superpowers overlay / ask-first / security / ponytail / database-readonly / first-setup / memory-refresh. Prefer `alwaysApply: false` + globs sempit. Alur: [examples/workflows/stack-cursorrules/](examples/workflows/stack-cursorrules/).
+9. **Superpowers vs kit aman:** overlay menang untuk proses fitur/bug. `security` / `database-readonly` / `first-setup` tetap menang di batas itu. Skill tidak ketemu → berhenti + pasang plugin, bukan `ask-first` fitur.
 
 ## G. Di luar kit ini
 
-Flutter/Dart MCP, Playwright *browser* MCP, skills Cursor di `.cursor/skills/` — boleh ditambah nanti; bukan checklist inti. **RTK** (`rtk-mcp`) termasuk inti disarankan — lihat [MCP-SETUP.md](MCP-SETUP.md) §4. **Hallmark** sudah di kit sebagai skill opsional-kuat untuk UI — lihat [examples/skills/hallmark/README.md](examples/skills/hallmark/README.md).
+Flutter/Dart MCP, Playwright *browser* MCP, skills Cursor di `.cursor/skills/` — boleh ditambah nanti; bukan checklist inti. **RTK** (`rtk-mcp`) termasuk inti disarankan — lihat [MCP-SETUP.md](MCP-SETUP.md) §4. **Hallmark** sudah di kit sebagai skill opsional-kuat untuk UI — lihat [examples/skills/hallmark/README.md](examples/skills/hallmark/README.md). **Superpowers** wajib sebagai plugin per host — lihat tabel cepat + README [obra/superpowers](https://github.com/obra/superpowers). Host di luar Cursor/Claude/OpenCode/Codex: tautan README itu saja, bukan checklist kit.
 
 ## H. Rule dari awesome-cursorrules (otomatis + manual)
 
@@ -91,7 +108,7 @@ Koleksi contoh rule Cursor:
 
 https://github.com/PatrickJS/awesome-cursorrules
 
-**Alur otomatis (disarankan):** ikuti [examples/workflows/stack-cursorrules/](examples/workflows/stack-cursorrules/) — deteksi stack (tanya + PRD + scan repo) → usulkan maks **5–7** rule dari kategori yang relevan → konfirmasi user → pasang **dual** (`.mdc` Cursor + `.md` portable). Jangan vendor seluruh repo ke project.
+**Alur otomatis (disarankan):** ikuti [examples/workflows/stack-cursorrules/](examples/workflows/stack-cursorrules/) — deteksi stack (tanya + spec/plan Superpowers + scan repo) → usulkan maks **5–7** rule dari kategori yang relevan → konfirmasi user → pasang **dual** (`.mdc` Cursor + `.md` portable). Jangan vendor seluruh repo ke project.
 
 Isinya banyak file `.mdc` (kadang `.cursorrules`). Format itu dibuat untuk Cursor. Claude Code, OpenCode, dan agent lain biasanya cukup baca **teks Markdown biasa** (`.md`) — tanpa “kepala” khusus Cursor.
 
@@ -100,7 +117,7 @@ Analogi: resep di buku masak Cursor punya stiker di pojok (“pakai di oven mode
 ### Prinsip (jangan dilewati)
 
 1. **Pilih yang relevan saja** — jangan salin ratusan rule. Ambil hingga **5–7** yang cocok stack (lebih sedikit lebih baik).
-2. **Kit inti tetap menang** — tanya-dulu, ponytail, security, memory, DB read-only, first-setup dari Agent Kit jangan diganti habis oleh rule stack dari luar.
+2. **Kit inti tetap menang** — Superpowers overlay, tanya-dulu, ponytail, security, memory, DB read-only, first-setup dari Agent Kit jangan diganti habis oleh rule stack dari luar.
 3. **Sesuaikan stack** — rule Next.js tidak otomatis cocok untuk Flutter/Postgres; edit sebelum dipakai.
 4. **Sumber resmi = link GitHub di atas** — clone/fetch saat perlu. Kit ini tidak bergantung folder lokal tertentu dan **tidak** menyimpan salinan penuh upstream.
 
