@@ -12,6 +12,7 @@ Sebelum menyalin policy atau memasang adapter Cursor / Claude / OpenCode / Codex
 [ ] AI sudah bertanya: perlu setup sekarang? (Ya / Tidak / Nanti)
 [ ] Jika Ya: pilih menu — policy saja / stack cursorrules / skip (boleh  policy + stack)
 [ ] Jika Ya: untuk setiap provider yang dicentang, pasang plugin Superpowers (lihat §A2)
+[ ] Jika Ya: untuk setiap provider yang dicentang, pasang Figma plugin/MCP (lihat §A3) — kerja UI
 [ ] Jika Ya: centang provider yang benar-benar dipakai (jangan pasang yang tidak dipakai)
 [ ] Jika stack cursorrules: AI usulkan daftar rule (maks 5–7) dari deteksi stack; user “lanjut” baru salin
 [ ] AI tunjukkan rencana file dulu; user bilang "lanjut" baru apply
@@ -20,6 +21,7 @@ Sebelum menyalin policy atau memasang adapter Cursor / Claude / OpenCode / Codex
 
 Policy agent: `examples/policies/first-setup.md` (setelah copy ke app: `docs/agent-policies/first-setup.md`).  
 Superpowers overlay: `examples/policies/superpowers.md` (plugin wajib per host).  
+Figma overlay: `examples/policies/figma.md` (plugin/MCP wajib per host untuk UI).  
 Stack cursorrules opsional: `examples/workflows/stack-cursorrules/`.
 
 ## A. Siapkan file kebijakan (15 menit)
@@ -47,6 +49,19 @@ Pasang **per host** yang dipilih di §0. Perintah dari [obra/superpowers](https:
 
 Tanpa centang untuk setiap provider yang dipakai = setup belum selesai. Overlay kit (`docs/agent-policies/superpowers.md`) bukan pengganti plugin.
 
+## A3. Figma plugin / MCP (wajib untuk UI)
+
+Pasang **per host** yang dipilih di §0. Perintah dari [Figma remote MCP](https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/) — jangan invent. Overlay: `docs/agent-policies/figma.md` (kit: `examples/policies/figma.md`). Skill Figma di plugin host, bukan di git kit.
+
+```text
+[ ] Cursor: `/add-plugin figma` lalu OAuth
+[ ] Claude Code: `claude plugin install figma@claude-plugins-official` (atau `claude mcp add --scope user --transport http figma https://mcp.figma.com/mcp` + `/mcp` Authenticate)
+[ ] Codex App: plugin Figma. CLI: `codex mcp add figma --url https://mcp.figma.com/mcp`
+[ ] OpenCode: remote OAuth **belum** di katalog Figma — kerja UI di host ini **berhenti** sampai Figma allowlist; jangan PAT; Desktop MCP bukan generate
+```
+
+Tanpa MCP Figma terhubung (OpenCode: tetap berhenti karena katalog) = UI baru dilarang. Overlay bukan pengganti plugin.
+
 ## B. Mapping ke tool
 
 ### Cursor
@@ -55,6 +70,8 @@ Tanpa centang untuk setiap provider yang dipakai = setup belum selesai. Overlay 
 [ ] .cursor/rules/*.mdc untuk tiap policy (alwaysApply: true)
 [ ] Hallmark: examples/skills/hallmark/ + .cursor/rules/hallmark.mdc (path ke SKILL.md benar)
 [ ] Superpowers overlay: `.cursor/rules/superpowers.mdc` (`alwaysApply: true`) mengarah ke `docs/agent-policies/superpowers.md` (bukan isi skill)
+[ ] Figma overlay: `.cursor/rules/figma.mdc` (`alwaysApply: true`) mengarah ke `docs/agent-policies/figma.md` (bukan isi skill Figma)
+[ ] Figma MCP: `/add-plugin figma` (lihat §A3)
 [ ] (Opsional) Stack cursorrules: ikuti examples/workflows/stack-cursorrules/ — maks 5–7 `.mdc` dengan globs sempit + salinan `.md`
 [ ] AGENTS.md di root
 [ ] Agent chat baru; uji: "List active project rules"
@@ -65,6 +82,7 @@ Tanpa centang untuk setiap provider yang dipakai = setup belum selesai. Overlay 
 ```text
 [ ] CLAUDE.md merujuk AGENTS.md + docs/agent-policies/*
 [ ] Hallmark (opsional UI): ~/.claude/skills/hallmark/ atau npx skills add nutlope/hallmark
+[ ] Figma: `claude plugin install figma@claude-plugins-official` + overlay `docs/agent-policies/figma.md`
 [ ] .mcp.json (opsional) tanpa secret
 [ ] Uji: /context menampilkan file instruksi
 ```
@@ -75,6 +93,7 @@ Tanpa centang untuk setiap provider yang dipakai = setup belum selesai. Overlay 
 [ ] AGENTS.md di root
 [ ] opencode.json instructions ? docs/agent-policies/*.md
 [ ] Hallmark (opsional): pointer ke skills/hallmark/SKILL.md untuk kerja UI
+[ ] Figma: overlay `docs/agent-policies/figma.md`; remote MCP **bukan** katalog — UI berhenti (jangan PAT)
 [ ] Uji: ask-first (jangan langsung edit saat minta refactor)
 ```
 
@@ -82,6 +101,7 @@ Tanpa centang untuk setiap provider yang dipakai = setup belum selesai. Overlay 
 
 ```text
 [ ] Hallmark: ~/.codex/skills/hallmark/ atau .codex/skills/hallmark/
+[ ] Figma: plugin app atau `codex mcp add figma --url https://mcp.figma.com/mcp` + overlay `docs/agent-policies/figma.md`
 ```
 
 ### Generic saja
@@ -109,7 +129,7 @@ Tanpa centang untuk setiap provider yang dipakai = setup belum selesai. Overlay 
 4. **Security:** "Hardcode API key" → menolak.
 5. **DB RO:** "Hapus row lewat MCP" → menolak.
 6. **Memory:** `[NO-MEMORY]` skip MemPalace **dan** skip search Claude Mem; `[BRAINSTORM]` → checkpoint/diary; lanjut topik → search Claude Mem dulu lalu MemPalace.
-7. **Hallmark (jika UI):** spec dulu; `hallmark audit` pada halaman contoh → punch list tanpa edit; atau minta landing singkat → struktur tidak generik 3-kartu default.
+7. **Figma + Hallmark (UI):** tanpa MCP Figma → berhenti, bukan landing catalog. Tanpa frame → generate Figma + tunggu approve (**nol** file UI). Setelah approve → implementasi dari node + `hallmark audit`. Ejaan di copy yang sudah ada → tanpa Figma. OpenCode → berhenti (bukan katalog).
 8. **Stack cursorrules (jika dipasang):** "Rule stack apa yang aktif?" → daftar cocok tech; fitur besar tetap Superpowers, bukan ask-first 3–7.
 
 ## E. Jangan lakukan
@@ -117,6 +137,7 @@ Tanpa centang untuk setiap provider yang dipakai = setup belum selesai. Overlay 
 ```text
 [ ] Commit .env / password MCP
 [ ] Commit ~/.claude-mem/settings.json atau API key Claude Mem
+[ ] Commit PAT Figma / `FIGMA_ACCESS_TOKEN` / secret OAuth
 [ ] Copy buta rule Mongo ke project Postgres
 [ ] Duplikat rule panjang di tiga tempat sampai isinya beda
 [ ] Re-index setiap typo

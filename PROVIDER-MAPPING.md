@@ -16,6 +16,7 @@ Satu kebijakan, banyak pintu.
 | Perintah build dan arsitektur | Opsional di rule terpisah | **`CLAUDE.md`** | Boleh di `AGENTS.md` atau `instructions` | `AGENTS.md` / `CLAUDE.md` |
 | Hallmark (UI anti-slop) | `.cursor/rules/hallmark.mdc` (`alwaysApply: true`) + skill di `examples/skills/hallmark/` (atau path salinan project) | `~/.claude/skills/hallmark/` atau skills project; pointer di `CLAUDE.md` | Pointer di `AGENTS.md` / `instructions` ke `skills/hallmark/SKILL.md` | Salin `SKILL.md` + `references/`; atau `npx skills add nutlope/hallmark` |
 | Superpowers (proses fitur/bug) | `.cursor/rules/superpowers.mdc` (`alwaysApply: true`) = overlay `docs/agent-policies/superpowers.md` (bukan skill). Plugin: `/add-plugin superpowers` | Plugin: `/plugin install superpowers@claude-plugins-official`. Overlay lewat `CLAUDE.md` / `docs/agent-policies/superpowers.md` | `opencode.json` `"plugin": ["superpowers@git+https://github.com/obra/superpowers.git"]` + overlay di `instructions` / `AGENTS.md` | Overlay `docs/agent-policies/superpowers.md`; pasang plugin di host yang benar-benar dipakai |
+| Figma (sumber visual UI) | Overlay `.cursor/rules/figma.mdc` (`alwaysApply: true`) → `docs/agent-policies/figma.md` (bukan skill). Plugin: `/add-plugin figma` | Plugin: `claude plugin install figma@claude-plugins-official`. Overlay `docs/agent-policies/figma.md` | Overlay di `instructions` / `AGENTS.md`. Remote MCP **bukan** katalog — UI berhenti | Overlay `docs/agent-policies/figma.md`; Codex: plugin atau `codex mcp add figma --url https://mcp.figma.com/mcp` |
 | MCP MemPalace / CBM / Claude Mem / RTK / Postgres | User: `~/.cursor/mcp.json` (Claude Mem: `npx claude-mem install` + `claude-mem cursor install user`) | Project: `.mcp.json` atau `claude mcp add`; Claude Mem: `npx` atau `/plugin marketplace add thedotmack/claude-mem` + `/plugin install claude-mem` | `npx claude-mem install --ide opencode` | Codex CLI: pilih di installer; host lain: README [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem) |
 
 ## A. Generic (paling portable)
@@ -40,6 +41,7 @@ Di `AGENTS.md`, arahkan ke `docs/agent-policies/*.md`.
 6. **Hallmark:** salin `examples/skills/hallmark/` ke project (atau pakai path kit), tambah `.cursor/rules/hallmark.mdc` yang mengarah ke `SKILL.md` itu. Detail: [examples/skills/hallmark/README.md](examples/skills/hallmark/README.md).
 7. **Superpowers:** pasang plugin (`/add-plugin superpowers`). Tambah `.cursor/rules/superpowers.mdc` (`alwaysApply: true`) yang berisi/mengarah ke overlay `docs/agent-policies/superpowers.md`. Jangan tempel tubuh skill Superpowers ke `.mdc`.
 8. **Claude Mem:** `npx claude-mem install`; pilih Cursor; `claude-mem cursor install user`; skip CMEM Pro dengan `--provider claude`. MCP di `%USERPROFILE%\.cursor\mcp.json`. Jangan tulis `.cursor/hooks` ke repo Agent Kit.
+9. **Figma:** `/add-plugin figma`. Tambah `.cursor/rules/figma.mdc` (`alwaysApply: true`) yang mengarah ke overlay `docs/agent-policies/figma.md`. Jangan tempel tubuh skill Figma ke `.mdc`. Jangan tulis `.cursor/` ke repo Agent Kit.
 
 ## C. Claude Code
 
@@ -50,6 +52,9 @@ Di `AGENTS.md`, arahkan ke `docs/agent-policies/*.md`.
 | Hallmark skill | `~/.claude/skills/hallmark/` (salin dari `examples/skills/hallmark/`) atau `npx skills add nutlope/hallmark` |
 | Superpowers plugin | `/plugin install superpowers@claude-plugins-official` |
 | Superpowers overlay | `docs/agent-policies/superpowers.md` + pointer di `AGENTS.md` / `CLAUDE.md` |
+| Figma plugin | `claude plugin install figma@claude-plugins-official` |
+| Figma overlay | `docs/agent-policies/figma.md` + pointer di `AGENTS.md` / `CLAUDE.md` |
+| Figma MCP manual | `claude mcp add --scope user --transport http figma https://mcp.figma.com/mcp` |
 | Claude Mem | `npx claude-mem install` atau `/plugin marketplace add thedotmack/claude-mem` lalu `/plugin install claude-mem` |
 | MCP team-shared | `.mcp.json` di root (commit) |
 | MCP pribadi | `claude mcp add --scope user` |
@@ -68,6 +73,8 @@ Docs: https://code.claude.com/docs/en/claude-md · https://code.claude.com/docs/
 | Hallmark | Pointer ke `skills/hallmark/SKILL.md` (jangan wajib-load tiap chat jika file besar — load saat kerja UI) |
 | Superpowers plugin | `"plugin": ["superpowers@git+https://github.com/obra/superpowers.git"]` di `opencode.json`; restart |
 | Superpowers overlay | Pointer ke `docs/agent-policies/superpowers.md` |
+| Figma overlay | Pointer ke `docs/agent-policies/figma.md` |
+| Figma MCP | Remote **bukan** katalog Figma. Kerja UI: berhenti. Jangan PAT. Desktop MCP bukan generate |
 | Claude Mem | `npx claude-mem install --ide opencode` |
 
 Contoh: lihat `examples/opencode.json.example`. Init: `/init`.
@@ -94,21 +101,28 @@ Salin `SKILL.md` + `references/` dari `examples/skills/hallmark/`, atau `npx ski
 - CLI: `npx claude-mem install` dan pilih Codex CLI di installer. Jangan invent `--ide`.
 - Skip CMEM Pro: `--provider claude`.
 
+### Figma
+
+- App: plugin Figma (OAuth).
+- CLI: `codex mcp add figma --url https://mcp.figma.com/mcp`.
+- Overlay: `docs/agent-policies/figma.md`.
+
 ## F. Konflik dan prioritas
 
 1. Satu sumber di app: `docs/agent-policies/`; file lain hanya merujuk. Di repo kit: `examples/policies/`.
 2. OpenCode: jika `AGENTS.md` dan `CLAUDE.md` ada, biasanya AGENTS yang dipakai — pastikan lengkap.
 3. Saat putaran klarifikasi (ask-first / first-setup), prioritaskan kejelasan (normal mode); caveman boleh kembali setelah arah jelas.
 4. Database read-only = MCP/ad-hoc. Migrasi SQL = jalur manusia/CI.
-5. **Hallmark vs readme-style:** UI/visual → Hallmark (policy `hallmark.md` + skill; responsive + audit) **setelah** spec Superpowers; README Markdown → readme-style. Jangan biarkan placeholder AI menjadi “selesai”.
+5. **Figma vs Hallmark vs readme-style:** UI/visual di app → overlay `figma.md` (sumber) lalu Hallmark (kualitas + audit) **setelah** spec Superpowers. README Markdown → readme-style. MCP Figma absen → berhenti, bukan placeholder AI / catalog Hallmark.
 6. **Build mode:** setelah spec **dan** plan Superpowers disetujui, eksekusi P0 sampai DoD tanpa tanya ulang per modul (kecuali blocker).
-7. **first-setup:** sebelum apply multi-provider atau stack cursorrules, wajib konfirmasi user; jangan pasang adapter untuk tool yang tidak dipilih. Superpowers plugin wajib di checklist, bukan opsi vibe.
-8. **Stack cursorrules vs kit inti:** tips tech dari awesome-cursorrules **tidak** boleh menimpa Superpowers overlay / ask-first / security / ponytail / database-readonly / first-setup / memory-refresh. Prefer `alwaysApply: false` + globs sempit. Alur: [examples/workflows/stack-cursorrules/](examples/workflows/stack-cursorrules/).
+7. **first-setup:** sebelum apply multi-provider atau stack cursorrules, wajib konfirmasi user; jangan pasang adapter untuk tool yang tidak dipilih. Superpowers plugin wajib di checklist, bukan opsi vibe. Figma plugin/MCP wajib di checklist untuk UI, bukan opsi vibe.
+8. **Stack cursorrules vs kit inti:** tips tech dari awesome-cursorrules **tidak** boleh menimpa Superpowers overlay / ask-first / security / ponytail / database-readonly / first-setup / memory-refresh / figma. Prefer `alwaysApply: false` + globs sempit. Alur: [examples/workflows/stack-cursorrules/](examples/workflows/stack-cursorrules/).
 9. **Superpowers vs kit aman:** overlay menang untuk proses fitur/bug. `security` / `database-readonly` / `first-setup` tetap menang di batas itu. Skill tidak ketemu → berhenti + pasang plugin, bukan `ask-first` fitur.
+10. **Figma vs kit aman:** overlay Figma menang untuk sumber visual. `security` tetap menang (tidak ada token di git). Superpowers tetap menang untuk spec fitur. Skill Figma tidak ketemu / MCP absen → berhenti + pasang, bukan generate UI Hallmark.
 
 ## G. Di luar kit ini
 
-Flutter/Dart MCP, Playwright *browser* MCP, skills Cursor di `.cursor/skills/` — boleh ditambah nanti; bukan checklist inti. **RTK** (`rtk-mcp`) termasuk inti disarankan — lihat [MCP-SETUP.md](MCP-SETUP.md) §5. **Claude Mem** termasuk inti disarankan — lihat [MCP-SETUP.md](MCP-SETUP.md) §3; upstream [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem). **Hallmark** sudah di kit sebagai skill opsional-kuat untuk UI — lihat [examples/skills/hallmark/README.md](examples/skills/hallmark/README.md). **Superpowers** wajib sebagai plugin per host — lihat tabel cepat + README [obra/superpowers](https://github.com/obra/superpowers). Host di luar Cursor/Claude/OpenCode/Codex: tautan README upstream saja, bukan checklist kit.
+Flutter/Dart MCP, Playwright *browser* MCP, skills Cursor di `.cursor/skills/` — boleh ditambah nanti; bukan checklist inti. **RTK** (`rtk-mcp`) termasuk inti disarankan — lihat [MCP-SETUP.md](MCP-SETUP.md) §5. **Claude Mem** termasuk inti disarankan — lihat [MCP-SETUP.md](MCP-SETUP.md) §3; upstream [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem). **Figma** termasuk overlay + MCP wajib untuk UI — lihat [MCP-SETUP.md](MCP-SETUP.md) §6 dan `examples/policies/figma.md`. **Hallmark** sudah di kit sebagai skill opsional-kuat untuk UI — lihat [examples/skills/hallmark/README.md](examples/skills/hallmark/README.md). **Superpowers** wajib sebagai plugin per host — lihat tabel cepat + README [obra/superpowers](https://github.com/obra/superpowers). Host di luar Cursor/Claude/OpenCode/Codex: tautan README upstream saja, bukan checklist kit.
 
 ## H. Rule dari awesome-cursorrules (otomatis + manual)
 
