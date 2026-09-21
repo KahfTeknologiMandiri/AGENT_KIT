@@ -16,7 +16,7 @@ Satu kebijakan, banyak pintu.
 | Perintah build dan arsitektur | Opsional di rule terpisah | **`CLAUDE.md`** | Boleh di `AGENTS.md` atau `instructions` | `AGENTS.md` / `CLAUDE.md` |
 | Hallmark (UI anti-slop) | `.cursor/rules/hallmark.mdc` (`alwaysApply: true`) + skill di `examples/skills/hallmark/` (atau path salinan project) | `~/.claude/skills/hallmark/` atau skills project; pointer di `CLAUDE.md` | Pointer di `AGENTS.md` / `instructions` ke `skills/hallmark/SKILL.md` | Salin `SKILL.md` + `references/`; atau `npx skills add nutlope/hallmark` |
 | Superpowers (proses fitur/bug) | `.cursor/rules/superpowers.mdc` (`alwaysApply: true`) = overlay `docs/agent-policies/superpowers.md` (bukan skill). Plugin: `/add-plugin superpowers` | Plugin: `/plugin install superpowers@claude-plugins-official`. Overlay lewat `CLAUDE.md` / `docs/agent-policies/superpowers.md` | `opencode.json` `"plugin": ["superpowers@git+https://github.com/obra/superpowers.git"]` + overlay di `instructions` / `AGENTS.md` | Overlay `docs/agent-policies/superpowers.md`; pasang plugin di host yang benar-benar dipakai |
-| MCP MemPalace / CBM / RTK / Postgres | User: `~/.cursor/mcp.json` | Project: `.mcp.json` atau `claude mcp add` | Config MCP OpenCode | Sesuai host |
+| MCP MemPalace / CBM / Claude Mem / RTK / Postgres | User: `~/.cursor/mcp.json` (Claude Mem: `npx claude-mem install` + `claude-mem cursor install user`) | Project: `.mcp.json` atau `claude mcp add`; Claude Mem: `npx` atau `/plugin marketplace add thedotmack/claude-mem` + `/plugin install claude-mem` | `npx claude-mem install --ide opencode` | Codex CLI: pilih di installer; host lain: README [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem) |
 
 ## A. Generic (paling portable)
 
@@ -39,6 +39,7 @@ Di `AGENTS.md`, arahkan ke `docs/agent-policies/*.md`.
 5. Edit memory-refresh: ganti path/scope agar cocok project baru.
 6. **Hallmark:** salin `examples/skills/hallmark/` ke project (atau pakai path kit), tambah `.cursor/rules/hallmark.mdc` yang mengarah ke `SKILL.md` itu. Detail: [examples/skills/hallmark/README.md](examples/skills/hallmark/README.md).
 7. **Superpowers:** pasang plugin (`/add-plugin superpowers`). Tambah `.cursor/rules/superpowers.mdc` (`alwaysApply: true`) yang berisi/mengarah ke overlay `docs/agent-policies/superpowers.md`. Jangan tempel tubuh skill Superpowers ke `.mdc`.
+8. **Claude Mem:** `npx claude-mem install`; pilih Cursor; `claude-mem cursor install user`; skip CMEM Pro dengan `--provider claude`. MCP di `%USERPROFILE%\.cursor\mcp.json`. Jangan tulis `.cursor/hooks` ke repo Agent Kit.
 
 ## C. Claude Code
 
@@ -49,6 +50,7 @@ Di `AGENTS.md`, arahkan ke `docs/agent-policies/*.md`.
 | Hallmark skill | `~/.claude/skills/hallmark/` (salin dari `examples/skills/hallmark/`) atau `npx skills add nutlope/hallmark` |
 | Superpowers plugin | `/plugin install superpowers@claude-plugins-official` |
 | Superpowers overlay | `docs/agent-policies/superpowers.md` + pointer di `AGENTS.md` / `CLAUDE.md` |
+| Claude Mem | `npx claude-mem install` atau `/plugin marketplace add thedotmack/claude-mem` lalu `/plugin install claude-mem` |
 | MCP team-shared | `.mcp.json` di root (commit) |
 | MCP pribadi | `claude mcp add --scope user` |
 
@@ -66,6 +68,7 @@ Docs: https://code.claude.com/docs/en/claude-md · https://code.claude.com/docs/
 | Hallmark | Pointer ke `skills/hallmark/SKILL.md` (jangan wajib-load tiap chat jika file besar — load saat kerja UI) |
 | Superpowers plugin | `"plugin": ["superpowers@git+https://github.com/obra/superpowers.git"]` di `opencode.json`; restart |
 | Superpowers overlay | Pointer ke `docs/agent-policies/superpowers.md` |
+| Claude Mem | `npx claude-mem install --ide opencode` |
 
 Contoh: lihat `examples/opencode.json.example`. Init: `/init`.
 
@@ -86,6 +89,11 @@ Salin `SKILL.md` + `references/` dari `examples/skills/hallmark/`, atau `npx ski
 - CLI: `/plugins` → search `superpowers` → Install Plugin.
 - Overlay: `docs/agent-policies/superpowers.md` (salinan dari kit).
 
+### Claude Mem
+
+- CLI: `npx claude-mem install` dan pilih Codex CLI di installer. Jangan invent `--ide`.
+- Skip CMEM Pro: `--provider claude`.
+
 ## F. Konflik dan prioritas
 
 1. Satu sumber di app: `docs/agent-policies/`; file lain hanya merujuk. Di repo kit: `examples/policies/`.
@@ -100,7 +108,7 @@ Salin `SKILL.md` + `references/` dari `examples/skills/hallmark/`, atau `npx ski
 
 ## G. Di luar kit ini
 
-Flutter/Dart MCP, Playwright *browser* MCP, skills Cursor di `.cursor/skills/` — boleh ditambah nanti; bukan checklist inti. **RTK** (`rtk-mcp`) termasuk inti disarankan — lihat [MCP-SETUP.md](MCP-SETUP.md) §4. **Hallmark** sudah di kit sebagai skill opsional-kuat untuk UI — lihat [examples/skills/hallmark/README.md](examples/skills/hallmark/README.md). **Superpowers** wajib sebagai plugin per host — lihat tabel cepat + README [obra/superpowers](https://github.com/obra/superpowers). Host di luar Cursor/Claude/OpenCode/Codex: tautan README itu saja, bukan checklist kit.
+Flutter/Dart MCP, Playwright *browser* MCP, skills Cursor di `.cursor/skills/` — boleh ditambah nanti; bukan checklist inti. **RTK** (`rtk-mcp`) termasuk inti disarankan — lihat [MCP-SETUP.md](MCP-SETUP.md) §5. **Claude Mem** termasuk inti disarankan — lihat [MCP-SETUP.md](MCP-SETUP.md) §3; upstream [thedotmack/claude-mem](https://github.com/thedotmack/claude-mem). **Hallmark** sudah di kit sebagai skill opsional-kuat untuk UI — lihat [examples/skills/hallmark/README.md](examples/skills/hallmark/README.md). **Superpowers** wajib sebagai plugin per host — lihat tabel cepat + README [obra/superpowers](https://github.com/obra/superpowers). Host di luar Cursor/Claude/OpenCode/Codex: tautan README upstream saja, bukan checklist kit.
 
 ## H. Rule dari awesome-cursorrules (otomatis + manual)
 

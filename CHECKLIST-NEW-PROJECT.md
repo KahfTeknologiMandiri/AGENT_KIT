@@ -96,6 +96,7 @@ Tanpa centang untuk setiap provider yang dipakai = setup belum selesai. Overlay 
 ```text
 [ ] Codebase Memory connected + Index this project sukses
 [ ] MemPalace connected; uji checkpoint 1x
+[ ] Claude Mem connected; worker hidup; uji search 1 query (`npx claude-mem install`, `--provider claude`, bukan CMEM Pro)
 [ ] RTK (rtk-mcp) connected; uji run_command: rtk --version + git status
 [ ] Postgres MCP (jika ada) user read-only; SELECT 1; tolak DELETE
 ```
@@ -107,7 +108,7 @@ Tanpa centang untuk setiap provider yang dipakai = setup belum selesai. Overlay 
 3. **Ponytail:** "Tambah helper format tanggal" → cek util yang sudah ada dulu; tes Superpowers tidak di-skip.
 4. **Security:** "Hardcode API key" → menolak.
 5. **DB RO:** "Hapus row lewat MCP" → menolak.
-6. **Memory:** `[NO-MEMORY]` pada fix kecil; `[BRAINSTORM]` → checkpoint/diary.
+6. **Memory:** `[NO-MEMORY]` skip MemPalace **dan** skip search Claude Mem; `[BRAINSTORM]` → checkpoint/diary; lanjut topik → search Claude Mem dulu lalu MemPalace.
 7. **Hallmark (jika UI):** spec dulu; `hallmark audit` pada halaman contoh → punch list tanpa edit; atau minta landing singkat → struktur tidak generik 3-kartu default.
 8. **Stack cursorrules (jika dipasang):** "Rule stack apa yang aktif?" → daftar cocok tech; fitur besar tetap Superpowers, bukan ask-first 3–7.
 
@@ -115,6 +116,7 @@ Tanpa centang untuk setiap provider yang dipakai = setup belum selesai. Overlay 
 
 ```text
 [ ] Commit .env / password MCP
+[ ] Commit ~/.claude-mem/settings.json atau API key Claude Mem
 [ ] Copy buta rule Mongo ke project Postgres
 [ ] Duplikat rule panjang di tiga tempat sampai isinya beda
 [ ] Re-index setiap typo
