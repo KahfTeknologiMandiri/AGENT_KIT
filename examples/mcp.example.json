@@ -31,6 +31,9 @@
         "PGPASSWORD": "${PGPASSWORD}",
         "PGDATABASE": "${PGDATABASE}"
       }
+    },
+    "figma": {
+      "url": "https://mcp.figma.com/mcp"
     }
   }
 }

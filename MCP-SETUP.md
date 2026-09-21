@@ -7,8 +7,9 @@
 | **Claude Mem** | Observasi sesi (hook + worker); search 3 lapis | Disarankan |
 | **RTK** (`rtk-mcp`) | Shell via `run_command`; output CLI dipangkas 60–90% token | Disarankan |
 | **Postgres** | Baca schema dan SELECT | Jika project pakai Postgres |
+| **Figma** | Sumber visual UI (frame/node); design-to-code | Wajib untuk UI di app |
 
-Flutter MCP / Playwright browser automation: di luar scope kit ini (Playwright *sebagai perintah* boleh lewat RTK allowlist).
+Flutter MCP / Playwright browser automation: di luar scope kit ini (Playwright *sebagai perintah* boleh lewat RTK allowlist). Figma **masuk** kit — overlay `examples/policies/figma.md`.
 
 Detail install CBM khusus Cursor + Windows: [../SETUP_AGENT_TOOLS.md](../SETUP_AGENT_TOOLS.md).
 
@@ -20,6 +21,7 @@ Detail install CBM khusus Cursor + Windows: [../SETUP_AGENT_TOOLS.md](../SETUP_A
 - User DB Postgres untuk AI: idealnya role **read-only**.
 - RTK: hanya perintah di allowlist; jangan anggap ini shell penuh (`bash` / `rm` / `sudo` ditolak).
 - Claude Mem: jangan commit `~/.claude-mem/settings.json`, API key provider, atau path user. Bukan CMEM Pro.
+- Figma: OAuth di host. Jangan commit PAT / `FIGMA_ACCESS_TOKEN`. Remote: `https://mcp.figma.com/mcp`.
 
 ## 1. Codebase Memory (CBM)
 
@@ -255,7 +257,39 @@ Daftar allowlist lengkap mengikuti rilis `rtk-mcp` — cek README upstream saat 
 - Beberapa proxy mengharapkan binary Unix (`ls`, `pwd`). Di Windows bisa gagal meski perintah ada di allowlist — pakai alternatif yang ada (`git`, `node`, atau tool file host).
 - Pesan "No hook installed — run `rtk init -g`" = peringatan opsional, bukan error MCP.
 
-## 6. Troubleshooting
+## 6. Figma MCP (UI)
+
+Upstream: https://developers.figma.com/docs/figma-mcp-server/  
+Install: https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/
+
+Remote (disarankan): `https://mcp.figma.com/mcp`. Auth = OAuth host. Overlay: `examples/policies/figma.md` (di app: `docs/agent-policies/figma.md`). Absen MCP / auth gagal → **berhenti** untuk kerja UI; jangan catalog Hallmark.
+
+Skill Figma resmi hidup di **plugin host**, bukan di git kit. Jangan vendor `examples/skills/figma/`.
+
+Desktop MCP `http://127.0.0.1:3845/mcp` **bukan** jalur generate. `use_figma` / `generate_figma_design` hanya di remote. Jika remote dan desktop sama-sama terpasang, tool remote bisa hilang — hapus atau ganti nama entri desktop.
+
+Kalau perintah upstream berubah, perbarui bagian ini + CHECKLIST + PROVIDER-MAPPING. Jangan salin prosedur panjang ke `AGENTS.md`.
+
+### Per host (empat host kit)
+
+| Host | Preferred | Manual |
+|------|-----------|--------|
+| Cursor | `/add-plugin figma` di Agent chat | MCP URL `https://mcp.figma.com/mcp` + OAuth |
+| Claude Code | `claude plugin install figma@claude-plugins-official` | `claude mcp add --scope user --transport http figma https://mcp.figma.com/mcp` lalu `/mcp` Authenticate |
+| Codex | Plugin Figma di app | `codex mcp add figma --url https://mcp.figma.com/mcp` |
+| OpenCode | **Tidak didukung** di katalog klien remote Figma | Overlay: berhenti. Tautan katalog / waitlist. Jangan PAT. Desktop bukan generate |
+
+Host lain: tautan katalog Figma, bukan checklist kit.
+
+Stub tanpa secret: `examples/mcp.example.json` (`url` saja).
+
+### Uji
+
+1. Host menampilkan Figma MCP connected
+2. Daftar tool memuat tool Figma
+3. OAuth selesai di host, bukan di git
+
+## 7. Troubleshooting
 
 | Gejala | Cek |
 |--------|-----|
@@ -275,8 +309,12 @@ Daftar allowlist lengkap mengikuti rilis `rtk-mcp` — cek README upstream saat 
 | `run_command` ditolak / not allowlisted | Perintah di luar allowlist — pecah jadi perintah yang diizinkan, atau jalankan manual di luar MCP |
 | Output tidak hemat token | `rtk` tidak di PATH → fallback mentah; install/perbaiki PATH lalu restart host |
 | `ls` / `pwd` gagal di Windows | Lihat batasan Windows di atas; bukan berarti RTK rusak |
+| Figma MCP merah / unauthenticated | OAuth di host; `/add-plugin figma` atau plugin Claude/Codex; URL `https://mcp.figma.com/mcp` |
+| `use_figma` / `generate_figma_design` hilang | Konflik remote vs desktop — hapus `http://127.0.0.1:3845/mcp` atau bedakan nama server |
+| OpenCode Figma 403 | Bukan katalog Figma; overlay: berhenti; jangan PAT |
+| Agent generate landing tanpa Figma | Overlay `figma.md` belum ter-load; MCP absen = berhenti, bukan Hallmark catalog |
 
-## 7. Urutan setelah tugas selesai
+## 8. Urutan setelah tugas selesai
 
 1. Selesai fitur/fix + tes relevan
 2. Session bermakna? — MemPalace checkpoint (bukan checkpoint manual Claude Mem)
