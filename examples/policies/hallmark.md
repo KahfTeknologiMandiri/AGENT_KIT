@@ -1,6 +1,6 @@
 # Hallmark — UI anti-AI-slop (policy kit)
 
-Skill penuh: `examples/skills/hallmark/SKILL.md` (+ `references/`). Setup: `examples/skills/hallmark/README.md`.
+Skill penuh: `examples/skills/hallmark/SKILL.md` (+ `references/`). Setup: `examples/skills/hallmark/README.md`. Spec dulu: overlay Superpowers (`examples/policies/superpowers.md`).
 
 Salin file ini ke `docs/agent-policies/hallmark.md` di project app bersama policy lain.
 
@@ -10,7 +10,7 @@ Setiap pekerjaan yang **membuat atau mengubah** halaman, landing, shell app, ata
 
 ## Gerbang sebelum tulis UI
 
-1. Selesaikan **putaran desain** di `ask-first` — atau terima `defaults` (Hallmark + tokens merek).
+1. Spec Superpowers sudah ada (atau `defaults` pada spec). Baru **putaran desain** Hallmark di `ask-first` — atau `defaults` (Hallmark + tokens merek).
 2. **Baca** `SKILL.md` (dan `references/` yang diminta skill) — jangan hanya mengingat ringkasan bridge.
 3. Tulis UI mengikuti Hallmark; **bukan** template “3 kartu + ungu / cream serif generik”.
 4. **Responsive:** layout harus usable di desktop dan mobile (bukan hanya lebar laptop).
@@ -20,7 +20,7 @@ Setiap pekerjaan yang **membuat atau mengubah** halaman, landing, shell app, ata
 
 - Ship placeholder / “shell sementara AI” sebagai hasil akhir untuk permukaan yang user lihat.
 - Mengabaikan Hallmark karena Ponytail “kode minimal” — minimal yang benar untuk UI = ikut Hallmark + responsive, bukan file CSS kosong bermerek.
-- Menimpa `security`, `database-readonly`, atau first-setup.
+- Menimpa `security`, `database-readonly`, first-setup, atau overlay Superpowers.
 
 ## Verb
 
@@ -33,4 +33,4 @@ Setiap pekerjaan yang **membuat atau mengubah** halaman, landing, shell app, ata
 
 ## Build mode
 
-Saat `ask-first` **build mode** aktif: tetap wajib Hallmark + responsive; **jangan** tanya ulang desain tiap halaman jika sudah `defaults` / putaran desain selesai.
+Saat **build mode** aktif (spec + plan Superpowers disetujui): tetap wajib Hallmark + responsive; **jangan** tanya ulang desain tiap halaman jika sudah `defaults` / putaran desain selesai.
