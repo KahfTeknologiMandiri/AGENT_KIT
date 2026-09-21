@@ -6,10 +6,10 @@ Upstream (CC0): [PatrickJS/awesome-cursorrules](https://github.com/PatrickJS/awe
 
 ## Kapan dipakai
 
-- Setup pertama (bersama policy Agent Kit / vibe), **atau**
+- Setup pertama (bersama policy Agent Kit), **atau**
 - Project lama yang sudah jalan — sesuaikan dengan stack yang **benar-benar ada** di repo.
 
-## Wajib lewat first-setup / ask-first
+## Wajib lewat first-setup (konfirmasi) / overlay Superpowers untuk fitur
 
 **Jangan** langsung clone atau salin puluhan file.
 
@@ -26,7 +26,7 @@ Gabungkan sinyal; jangan tebak buta.
 | Sumber | Cara |
 |--------|------|
 | **Tanya user** | “Stack utama apa?” (contoh: Next.js + Postgres + Playwright) |
-| **PRD / Tech Design** | Baca `docs/PRD-*`, `docs/*TechDesign*`, atau hasil vibe-mvp |
+| **Spec / plan Superpowers** | Baca `docs/superpowers/specs/`, plans, atau dokumen spec/plan yang ditulis plugin |
 | **Scan project lama** | `package.json` / `pnpm-lock.yaml` / `pubspec.yaml` / `go.mod` / `Cargo.toml` / `composer.json` / folder `lib/` `app/` `src/` / CI config |
 
 Tulis ringkas ke user: “Kelihatannya stack = X, Y, Z — benar?”
@@ -67,7 +67,7 @@ Untuk **setiap** rule yang disetujui:
 1. Ambil isi dari upstream (`rules/…/*.mdc` atau setara).  
 2. **Cursor:** simpan di `.cursor/rules/` sebagai `.mdc`.  
    - Prefer `alwaysApply: false` + `globs` sempit (mis. `**/*.{tsx,ts}`).  
-   - Jangan biarkan rule luar menimpa ask-first / security / ponytail / database-readonly / first-setup.  
+   - Jangan biarkan rule luar menimpa Superpowers overlay / ask-first / security / ponytail / database-readonly / first-setup.  
 3. **Portable:** salin tubuh Markdown **tanpa** frontmatter `---` ke `docs/agent-policies/stack-<nama>.md` (atau `imported/`).  
 4. Rujuk file `.md` dari `AGENTS.md` / `opencode.json` / `CLAUDE.md` sesuai [PROVIDER-MAPPING.md](../../../PROVIDER-MAPPING.md).  
 5. Catat sumber: URL file upstream + tanggal ambil (1 baris di README project atau komentar atas file).
@@ -84,17 +84,17 @@ Rule stack = tips pekerjaan. Kalau tips bilang “langsung ubah tanpa tanya” a
 - Commit seluruh isi awesome-cursorrules ke project.  
 - Pasang >7 rule “untuk berjaga-jaga”.  
 - `alwaysApply: true` pada rule luar tanpa permintaan eksplisit user.  
-- Menimpa `ask-first`, `ponytail`, `security`, `database-readonly`, `first-setup`, `memory-refresh`.
+- Menimpa Superpowers overlay, `ask-first`, `ponytail`, `security`, `database-readonly`, `first-setup`, `memory-refresh`.
 
 ## Uji singkat
 
 - Cursor: Agent chat baru → “List active project rules” / “Rule stack apa yang aktif?”  
-- Minta tugas kecil sesuai stack (mis. “buat komponen React”) → pastikan tips stack terpakai **dan** ask-first tetap jalan untuk refactor besar.
+- Minta tugas kecil sesuai stack (mis. “buat komponen React”) → pastikan tips stack terpakai. Fitur besar → Superpowers, bukan ask-first 3–7.
 
-## Bedanya dengan policy Agent Kit & vibe
+## Bedanya dengan policy Agent Kit
 
-| | Stack cursorrules | Agent Kit policies | Vibe MVP |
-|---|-------------------|--------------------|----------|
-| Fokus | Tips coding per tech | Sikap AI tiap hari | Ide → PRD → MVP |
-| Sumber | PatrickJS (pilih tipis) | `docs/agent-policies/` | Upstream KhazP |
-| Kapan | Setup / project lama ber-stack | Setiap sesi | Awal produk |
+| | Stack cursorrules | Agent Kit policies | Superpowers overlay |
+|---|-------------------|--------------------|---------------------|
+| Fokus | Tips coding per tech | Sikap AI tiap hari + batas aman | Cara agent bangun fitur/bug |
+| Sumber | PatrickJS (pilih tipis) | `docs/agent-policies/` | Plugin obra/superpowers + `superpowers.md` |
+| Kapan | Setup / project lama ber-stack | Setiap sesi | Fitur baru / bug / multi-langkah |

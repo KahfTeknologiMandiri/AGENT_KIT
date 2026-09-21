@@ -24,7 +24,7 @@ Atau salin ulang `skills/hallmark/` dari repo Hallmark ke folder ini (timpa), la
 ### Cursor (disarankan di project yang pakai kit)
 
 1. Pastikan folder skill ada di project (sudah di-vendor di kit: `examples/skills/hallmark/`).
-2. Rule aktif: `.cursor/rules/hallmark.mdc` dengan `alwaysApply: true` (lihat mirror di repo agent-kit).
+2. Rule aktif **di app** (setelah first-setup): `.cursor/rules/hallmark.mdc` dengan `alwaysApply: true`. Repo kit **tidak** menyimpan file itu di git.
 3. Path di rule harus mengarah ke lokasi skill di project Anda. Di agent-kit: `examples/skills/hallmark/SKILL.md`. Di app lain, biasanya salin ke `skills/hallmark/` atau biarkan di `docs/agent-kit/examples/skills/hallmark/` lalu sesuaikan path di `.mdc`.
 4. Buka **Agent chat baru** setelah menambah/ubah rule.
 5. Uji: `hallmark audit .` atau minta “buat landing page untuk X”.
@@ -74,13 +74,13 @@ Ini cara paling mudah untuk mesin pribadi; folder di kit tetap berguna agar proj
 | Domain | Yang menang |
 |--------|-------------|
 | README Markdown | `readme-style` |
-| UI / landing / shell / redesign visual | **Hallmark** (+ responsive + audit sebelum ship) |
-| Putaran desain / `defaults` / build mode | `ask-first` (lalu Hallmark tanpa tanya ulang tiap halaman) |
+| UI / landing / shell / redesign visual | **Figma overlay** (sumber frame) lalu **Hallmark** (kualitas + audit) |
+| Putaran desain / `defaults` / build mode | Approve frame Figma (`figma.md`); `defaults` tetap generate+approve; Hallmark tanpa ganti makrostruktur |
 | Secret / auth / DB MCP | `security` + `database-readonly` |
 | Setup multi-provider | `first-setup` |
 | Jumlah kode | `ponytail` — **tidak** boleh skip Hallmark demi placeholder UI |
 
-Policy ringkas kit: `docs/agent-policies/hallmark.md`.
+Policy ringkas: `examples/policies/hallmark.md` (di app: `docs/agent-policies/hallmark.md`).
 
 Hallmark punya safety rail sendiri: jangan hapus pohon route/production tanpa izin eksplisit.
 

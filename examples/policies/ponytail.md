@@ -19,3 +19,6 @@ Bug fix = root cause, not symptom. Fix the shared function once; grep callers.
 Rules: no unrequested abstractions; no new dependency if avoidable; no boilerplate; deletion over addition; fewest files; shortest correct diff; question complex requests; mark deliberate ceilings with a `ponytail:` comment.
 
 Not lazy about: understanding, trust-boundary validation, error handling that prevents data loss, security, accessibility, explicit requests. Non-trivial logic leaves ONE runnable check behind.
+
+Fitur baru / bug: urutan kerja = TDD Superpowers (`test-driven-development` di overlay `superpowers.md`). Tangga Ponytail = ukuran diff. Jangan skip tes karena “kode minimal”.
+
