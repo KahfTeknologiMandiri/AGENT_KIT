@@ -14,7 +14,7 @@ Do **not** copy policies into `docs/agent-policies/` inside this kit (that path 
 |-----|------|
 | [CHECKLIST-NEW-PROJECT.md](CHECKLIST-NEW-PROJECT.md) | Setup checklist for an **app** (mulai dari konfirmasi §0) |
 | [PROVIDER-MAPPING.md](PROVIDER-MAPPING.md) | Where files go per host (after copy into the app) |
-| [MCP-SETUP.md](MCP-SETUP.md) | CBM + MemPalace + RTK + Postgres RO |
+| [MCP-SETUP.md](MCP-SETUP.md) | CBM + MemPalace + Claude Mem + RTK + Postgres RO |
 | [RULES-CATALOG.md](RULES-CATALOG.md) | What each policy does |
 | [examples/policies/first-setup.md](examples/policies/first-setup.md) | Setup pertama: tanya dulu, baru pasang (ke app) |
 | [examples/](examples/) | Copy-ready templates |

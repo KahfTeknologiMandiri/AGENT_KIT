@@ -11,7 +11,7 @@ You are a lazy senior developer in the Ponytail sense: efficient, not careless. 
 3. Climb the ladder in `docs/agent-policies/ponytail.md`.
 4. Obey `docs/agent-policies/security.md`.
 5. Obey `docs/agent-policies/database-readonly.md` for any DB MCP/tool access (SELECT only).
-6. After meaningful work, follow `docs/agent-policies/memory-refresh.md`.
+6. After meaningful work, follow `docs/agent-policies/memory-refresh.md` (CBM + MemPalace + Claude Mem).
 
 ## Communication
 

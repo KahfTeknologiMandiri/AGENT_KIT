@@ -97,13 +97,14 @@ Secret di env/vault; validasi input; query parameterized; auth framework + RBAC;
 **Portable (kit):** `examples/policies/security.md`  
 **App setelah setup:** `.cursor/rules/security-devsecops-ssdls-appsec.mdc`
 
-## 5. Memory refresh (Codebase Memory + MemPalace)
+## 5. Memory refresh (Codebase Memory + MemPalace + Claude Mem)
 
 | Lapisan | Tool | Fresh? |
 |---------|------|--------|
 | File di disk | Read, Grep | Ya |
-| Graph CBM | index_repository, search_graph | Tidak ? re-index |
-| MemPalace | checkpoint, search, diary | Tidak ? simpan manual |
+| Graph CBM | index_repository, search_graph | Tidak — re-index |
+| MemPalace | checkpoint, search, diary | Tidak — simpan manual |
+| Claude Mem | search, timeline, get_observations | Tidak — hook + worker; search saat lanjut topik |
 
 | Tag | Arti |
 |-----|------|
@@ -111,7 +112,9 @@ Secret di env/vault; validasi input; query parameterized; auth framework + RBAC;
 | `[MEMPALACE]` | Wajib update MemPalace |
 | `[SESSION-END]` | Wajib checkpoint session |
 | `[BRAINSTORM]` | Checkpoint + diary |
-| `[NO-MEMORY]` | Skip simpan/refresh |
+| `[NO-MEMORY]` | Skip MemPalace **dan** skip search/corpus Claude Mem |
+
+Lanjut topik: search Claude Mem dulu, lalu MemPalace. Keputusan tetap di MemPalace. `smart_search` Claude Mem bukan pengganti CBM.
 
 Session bermakna (wajib checkpoint): ubah kode, brainstorm, debug root cause, review pola bisnis, atau tag di atas.
 

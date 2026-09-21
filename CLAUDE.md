@@ -52,4 +52,4 @@ consumer app (after first-setup):
 - DB via MCP: read-only (see `examples/policies/database-readonly.md`).
 - UI/landing/shell: Hallmark (`examples/policies/hallmark.md` + `examples/skills/hallmark/SKILL.md`) — responsive + audit; README prose: `readme-style`.
 - Superpowers: fitur/bug → overlay + plugin. Ask-first: first-setup + non-fitur. UI: spec dulu, lalu Hallmark. **Build mode** setelah spec+plan Superpowers disetujui (kerja sampai DoD, jangan tanya per modul).
-- After meaningful work: MemPalace checkpoint; re-index CBM only when kit structure changes a lot or `[REINDEX]`.
+- After meaningful work: MemPalace checkpoint; on continue-topic search Claude Mem then MemPalace; re-index CBM only when kit structure changes a lot or `[REINDEX]`.

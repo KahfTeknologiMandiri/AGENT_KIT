@@ -15,7 +15,7 @@ When installing the kit **into an application** repo (after `first-setup` confir
 3. Climb the ladder in `examples/policies/ponytail.md`.
 4. Obey `examples/policies/security.md`.
 5. Obey `examples/policies/database-readonly.md` for any DB MCP/tool access (SELECT only).
-6. After meaningful work, follow `examples/policies/memory-refresh.md`.
+6. After meaningful work, follow `examples/policies/memory-refresh.md` (CBM + MemPalace + Claude Mem).
 
 ## Communication
 
