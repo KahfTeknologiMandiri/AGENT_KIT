@@ -1,2 +1,8 @@
+# Local generated copies after first-setup. Canonical policies: examples/policies/
+# This kit does not ship docs/agent-policies/ or .cursor/rules/.
+# Consumers copy those into the application repo (and usually commit them there).
+# Exception: track Superpowers specs/plans under docs/superpowers/ (kit overlay process).
 .cursor
-docs
+docs/*
+!docs/superpowers/
+!docs/superpowers/**
