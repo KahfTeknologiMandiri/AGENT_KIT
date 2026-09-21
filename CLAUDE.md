@@ -41,7 +41,7 @@ consumer app (after first-setup):
 - Active policies **in this kit:** `examples/policies/` (includes `first-setup.md`)
 - Active policies **in an app:** `docs/agent-policies/`
 - Superpowers overlay: `examples/policies/superpowers.md` (plugin wajib di host; jangan vendor skill)
-- UI skill: `examples/skills/hallmark/` (see its README for Cursor / Claude / Codex / OpenCode)
+- UI: overlay `examples/policies/figma.md` (MCP Figma; frame di-approve) + skill `examples/skills/hallmark/` (README: Cursor / Claude / Codex / OpenCode)
 
 ## Agent notes
 
@@ -50,6 +50,6 @@ consumer app (after first-setup):
 - First-time / multi-provider setup: confirm via `examples/policies/first-setup.md` before copying files. Apply into an **app**, not into this kit.
 - Stack cursorrules: `examples/workflows/stack-cursorrules/` — max 5–7; kit policies win over external rules.
 - DB via MCP: read-only (see `examples/policies/database-readonly.md`).
-- UI/landing/shell: Hallmark (`examples/policies/hallmark.md` + `examples/skills/hallmark/SKILL.md`) — responsive + audit; README prose: `readme-style`.
-- Superpowers: fitur/bug → overlay + plugin. Ask-first: first-setup + non-fitur. UI: spec dulu, lalu Hallmark. **Build mode** setelah spec+plan Superpowers disetujui (kerja sampai DoD, jangan tanya per modul).
+- UI/landing/shell: Figma overlay (`examples/policies/figma.md`) lalu Hallmark (`examples/policies/hallmark.md` + `examples/skills/hallmark/SKILL.md`) — responsive + audit; README prose: `readme-style`.
+- Superpowers: fitur/bug → overlay + plugin. Ask-first: first-setup + non-fitur. UI: spec dulu, lalu Figma (approve frame), lalu Hallmark. **Build mode** setelah spec+plan Superpowers disetujui (kerja sampai DoD, jangan tanya per modul; permukaan UI baru tetap butuh node Figma).
 - After meaningful work: MemPalace checkpoint; on continue-topic search Claude Mem then MemPalace; re-index CBM only when kit structure changes a lot or `[REINDEX]`.

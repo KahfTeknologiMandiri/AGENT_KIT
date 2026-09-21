@@ -10,8 +10,8 @@ When installing the kit **into an application** repo (after `first-setup` confir
 
 ## Before changing code, config, workflow, or database behavior
 
-1. Follow `examples/policies/superpowers.md` for new features, bugs, and multi-step product work (plugin + seven skills). `ask-first.md` is only for first-setup and non-feature work (config, rename) unless proceed/`defaults`. After approved Superpowers spec **and** plan: **build mode** (ship to DoD; no per-feature re-ask). UI: spec first, then one Hallmark **design round** (or `defaults` → Hallmark + tokens).
-2. For **first-time / multi-provider setup** (or stack cursorrules): follow `examples/policies/first-setup.md` — confirm with the user before creating or copying setup files; skip = checklist links only, no edits. Apply only into an **application** repo, not into this kit. Stack rules: `examples/workflows/stack-cursorrules/`. Superpowers plugin install is required on each selected host (checklist), not a first-setup menu item.
+1. Follow `examples/policies/superpowers.md` for new features, bugs, and multi-step product work (plugin + seven skills). `ask-first.md` is only for first-setup and non-feature work (config, rename) unless proceed/`defaults`. After approved Superpowers spec **and** plan: **build mode** (ship to DoD; no per-feature re-ask). UI in **apps**: spec first, then `figma.md` (approved frame; `defaults` still generate+approve), then Hallmark.
+2. For **first-time / multi-provider setup** (or stack cursorrules): follow `examples/policies/first-setup.md` — confirm with the user before creating or copying setup files; skip = checklist links only, no edits. Apply only into an **application** repo, not into this kit. Stack rules: `examples/workflows/stack-cursorrules/`. Superpowers plugin install is required on each selected host (checklist), not a first-setup menu item. Figma plugin/MCP is checklist-required for UI hosts, not a first-setup menu item.
 3. Climb the ladder in `examples/policies/ponytail.md`.
 4. Obey `examples/policies/security.md`.
 5. Obey `examples/policies/database-readonly.md` for any DB MCP/tool access (SELECT only).
@@ -27,7 +27,7 @@ This kit is documentation + examples (no app server / no product DB). Consumer t
 
 ## UI / visual design
 
-For pages, landing, shell, and component visuals: follow `examples/policies/hallmark.md` + skill (`examples/skills/hallmark/SKILL.md` + `references/`). **Responsive** desktop+mobile; `hallmark audit` before shipping visual pages; no AI-placeholder shell as “done”. README Markdown stays under `readme-style`. Setup: `examples/skills/hallmark/README.md`.
+This kit repo is docs/examples — Figma overlay is **idle** here. In **apps**: pages, landing, shell, and component visuals follow `docs/agent-policies/figma.md` (this kit: `examples/policies/figma.md`) then Hallmark (`hallmark.md` + `examples/skills/hallmark/SKILL.md`). **Responsive** desktop+mobile; `hallmark audit` before shipping visual pages; no AI-placeholder shell as “done”. README Markdown stays under `readme-style`. Figma MCP missing → stop, do not invent a Hallmark catalog theme. Setup: CHECKLIST / MCP-SETUP / Hallmark README.
 
 ## Superpowers (fitur / bug)
 

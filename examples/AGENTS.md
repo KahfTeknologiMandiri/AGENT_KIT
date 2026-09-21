@@ -6,8 +6,8 @@ You are a lazy senior developer in the Ponytail sense: efficient, not careless. 
 
 ## Before changing code, config, workflow, or database behavior
 
-1. Follow `docs/agent-policies/superpowers.md` for new features, bugs, and multi-step product work (plugin + seven skills). `ask-first.md` is only for first-setup and non-feature work (config, rename) unless proceed/`defaults`. After approved Superpowers spec **and** plan: **build mode** (ship to DoD; no per-feature re-ask). UI: spec first, then one Hallmark **design round** (or `defaults` → Hallmark + tokens).
-2. For **first-time / multi-provider setup** (or stack cursorrules): follow `docs/agent-policies/first-setup.md` — confirm with the user before creating or copying setup files; skip = checklist links only, no edits. Stack rules: `examples/workflows/stack-cursorrules/`. Superpowers plugin install is required on each selected host (checklist), not a first-setup menu item.
+1. Follow `docs/agent-policies/superpowers.md` for new features, bugs, and multi-step product work (plugin + seven skills). `ask-first.md` is only for first-setup and non-feature work (config, rename) unless proceed/`defaults`. After approved Superpowers spec **and** plan: **build mode** (ship to DoD; no per-feature re-ask). UI: spec first, then `figma.md` (approved frame; `defaults` still generate+approve), then Hallmark.
+2. For **first-time / multi-provider setup** (or stack cursorrules): follow `docs/agent-policies/first-setup.md` — confirm with the user before creating or copying setup files; skip = checklist links only, no edits. Stack rules: `examples/workflows/stack-cursorrules/`. Superpowers plugin install is required on each selected host (checklist), not a first-setup menu item. Figma plugin/MCP is checklist-required for UI, not a first-setup menu item.
 3. Climb the ladder in `docs/agent-policies/ponytail.md`.
 4. Obey `docs/agent-policies/security.md`.
 5. Obey `docs/agent-policies/database-readonly.md` for any DB MCP/tool access (SELECT only).
@@ -23,7 +23,7 @@ Follow `docs/agent-policies/stack-backend.md` for this repo's real stack (do not
 
 ## UI / visual design
 
-For pages, landing, shell, and component visuals: follow `docs/agent-policies/hallmark.md` + skill (`examples/skills/hallmark/SKILL.md` + `references/`, or copied path). **Responsive** desktop+mobile; `hallmark audit` before shipping visual pages; no AI-placeholder shell as “done”. README Markdown stays under `readme-style`. Setup: `examples/skills/hallmark/README.md`.
+For pages, landing, shell, and component visuals: follow `docs/agent-policies/figma.md` then `docs/agent-policies/hallmark.md` + skill (`examples/skills/hallmark/SKILL.md` + `references/`, or copied path). **Responsive** desktop+mobile; `hallmark audit` before shipping visual pages; no AI-placeholder shell as “done”. README Markdown stays under `readme-style`. Figma MCP missing → stop. Setup: CHECKLIST / MCP-SETUP / `examples/skills/hallmark/README.md`.
 
 ## Superpowers (fitur / bug)
 

@@ -159,7 +159,7 @@ README seperti landing page; contoh kerja di 5 baris pertama; tabel fitur; Quick
 
 **Tujuan:** UI/landing/shell/komponen visual tidak jatuh ke default AI slop; **responsive** desktop+mobile; audit sebelum ship.
 
-**Gerbang:** setelah spec Superpowers, baca skill penuh sebelum tulis UI; larang ship placeholder AI sebagai “selesai”; Ponytail tidak mengizinkan skip Hallmark pada UI user-facing.
+**Gerbang:** setelah spec Superpowers **dan** frame Figma di-approve (`figma.md`); baca skill penuh sebelum tulis UI; larang ship placeholder AI sebagai “selesai”; Ponytail tidak mengizinkan skip Figma/Hallmark pada UI user-facing.
 
 **Verb:** default build · `hallmark audit` (skor, tanpa edit) · `hallmark redesign` · `hallmark study` (screenshot/URL).
 
@@ -169,6 +169,20 @@ README seperti landing page; contoh kerja di 5 baris pertama; tabel fitur; Quick
 **App setelah setup:** `docs/agent-policies/hallmark.md` · Cursor: `.cursor/rules/hallmark.mdc` (`alwaysApply: true` = bridge)  
 **Skill:** `examples/skills/hallmark/` (`SKILL.md` + `references/` + README setup)  
 Upstream: https://github.com/Nutlope/hallmark · demo: https://www.usehallmark.com/
+
+## 10b. Figma (sumber visual UI)
+
+**Analogi:** Tukang tidak mengarang denah di lapangan kalau gambar kerja sudah ada di meja gambar.
+
+**Tujuan:** UI app memakai frame Figma yang di-approve sebagai sumber layout/IA/token; Hallmark tetap gerbang kualitas.
+
+**Gerbang:** setelah spec Superpowers; MCP Figma wajib (absen = berhenti); agent boleh generate frame lalu tunggu approve; Hallmark tidak invent catalog sebagai fallback; `hallmark audit` sebelum ship.
+
+**Bukan untuk:** ejaan di string lama; README Markdown; kerja non-UI; repo Agent Kit (docs). Bukan vendor skill Figma.
+
+**Portable (kit):** `examples/policies/figma.md`  
+**App setelah setup:** `docs/agent-policies/figma.md` · Cursor: `.cursor/rules/figma.mdc` (`alwaysApply: true` = overlay)  
+**MCP:** [MCP-SETUP.md](MCP-SETUP.md) §6 · upstream: https://developers.figma.com/docs/figma-mcp-server/
 
 ## File root terkait
 
