@@ -4,6 +4,7 @@
 |-----|-------|--------|
 | **Codebase Memory** | Peta fungsi/route (graph) | Disarankan |
 | **MemPalace** | Catatan session / keputusan | Disarankan |
+| **Claude Mem** | Observasi sesi (hook + worker); search 3 lapis | Disarankan |
 | **RTK** (`rtk-mcp`) | Shell via `run_command`; output CLI dipangkas 60–90% token | Disarankan |
 | **Postgres** | Baca schema dan SELECT | Jika project pakai Postgres |
 
@@ -18,6 +19,7 @@ Detail install CBM khusus Cursor + Windows: [../SETUP_AGENT_TOOLS.md](../SETUP_A
 - Pairing dengan policy **database-readonly**: agent hanya SELECT.
 - User DB Postgres untuk AI: idealnya role **read-only**.
 - RTK: hanya perintah di allowlist; jangan anggap ini shell penuh (`bash` / `rm` / `sudo` ditolak).
+- Claude Mem: jangan commit `~/.claude-mem/settings.json`, API key provider, atau path user. Bukan CMEM Pro.
 
 ## 1. Codebase Memory (CBM)
 
@@ -75,7 +77,7 @@ Skip: typo, docs-only, fix kecil 1?3 file.
 | Akhir kerja bermakna | checkpoint atau `simpan session [SESSION-END]` |
 | Brainstorm | `[BRAINSTORM]` ? checkpoint + diary |
 | Fix kecil | `[NO-MEMORY]` |
-| Lanjut kemarin | `lanjut session tentang <topik>` ? `mempalace_search` dulu |
+| Lanjut kemarin | search Claude Mem (§3) lalu `mempalace_search` — lihat `memory-refresh` |
 
 ### Format checkpoint
 
@@ -88,7 +90,51 @@ Belum: <todo terbuka ? atau "selesai">
 Tanggal: <YYYY-MM-DD>
 ```
 
-## 3. Postgres read-only MCP
+## 3. Claude Mem
+
+Upstream: https://github.com/thedotmack/claude-mem  
+Docs: https://docs.claude-mem.ai/installation
+
+Bukan CMEM Pro / `cmem.ai` sebagai langkah checklist. Worker + SQLite lokal (`~/.claude-mem/`). Bukan pengganti MemPalace (keputusan) atau CBM (graph kode). Absen: kerja lanjut tanpa search — bukan gerbang Superpowers.
+
+### Sekali per mesin
+
+```bash
+npx claude-mem install
+```
+
+Pilih host yang dipakai (Cursor, Claude Code, OpenCode, Codex CLI). **Jangan** `npm install -g claude-mem` (itu SDK saja; tidak pasang hook/worker).
+
+Skip CMEM Pro: `--provider claude` (tidak ke `cmem.ai`) atau `CLAUDE_MEM_ONLINE_OPTIN=false`. Gemini / OpenRouter boleh pakai kunci user sendiri; jangan commit.
+
+`--ide` host-spesifik: salin dari README upstream jika tertulis (contoh: `--ide opencode`). Jangan invent flag. Codex CLI: pilih di installer interaktif.
+
+### Per host (empat host kit)
+
+| Host | Langkah |
+|------|---------|
+| Cursor | Pilih Cursor di installer, lalu `claude-mem cursor install user`. Restart Cursor. Jangan tulis `.cursor/` ke **repo Agent Kit**. App: user-level dianjurkan; project-level boleh, kit tidak wajib commit hooks. |
+| Claude Code | Sama `npx`, atau `/plugin marketplace add thedotmack/claude-mem` lalu `/plugin install claude-mem`. Restart. |
+| OpenCode | `npx claude-mem install --ide opencode` |
+| Codex CLI | Pilih Codex CLI di installer interaktif. Jangan invent `--ide`. |
+
+Host lain (Windsurf, Antigravity, Grok Bot, OpenClaw): tautan [README upstream](https://github.com/thedotmack/claude-mem), bukan checklist kit.
+
+### MCP search
+
+Daftarkan server `claude-mem` (lihat `examples/mcp.example.json`). Alur: `search` → `timeline` → `get_observations`. Jangan fetch penuh sebelum filter.
+
+`smart_search` / `smart_outline` / `smart_unfold` **bukan** pengganti CBM. Corpus (`build_corpus`, …) tidak wajib di loop harian.
+
+### Uji
+
+1. Worker: `claude-mem status` atau `http://127.0.0.1:${port}/api/health` (port di `~/.claude-mem/.worker.port`)
+2. Restart host sekali setelah pasang
+3. Satu `search` di chat agent
+
+Jangan restart worker yang sehat (antrian catatan di memori).
+
+## 4. Postgres read-only MCP
 
 ### Di server (konsep)
 
@@ -114,7 +160,7 @@ PGDATABASE=yourdb
 
 `SELECT 1;` lalu minta agent menolak `DELETE` — harus menolak sesuai policy.
 
-## 4. RTK (`rtk-mcp`) — shell hemat token
+## 5. RTK (`rtk-mcp`) — shell hemat token
 
 Upstream:
 - CLI filter: https://github.com/rtk-ai/rtk
@@ -209,7 +255,7 @@ Daftar allowlist lengkap mengikuti rilis `rtk-mcp` — cek README upstream saat 
 - Beberapa proxy mengharapkan binary Unix (`ls`, `pwd`). Di Windows bisa gagal meski perintah ada di allowlist — pakai alternatif yang ada (`git`, `node`, atau tool file host).
 - Pesan "No hook installed — run `rtk init -g`" = peringatan opsional, bukan error MCP.
 
-## 5. Troubleshooting
+## 6. Troubleshooting
 
 | Gejala | Cek |
 |--------|-----|
@@ -217,6 +263,10 @@ Daftar allowlist lengkap mengikuti rilis `rtk-mcp` — cek README upstream saat 
 | command not found | PATH belum ke-load — restart IDE/CLI |
 | Index aneh | Path root salah; re-index; cek monorepo root |
 | MemPalace kosong saat lanjut | Wing/room beda; keyword lain; mungkin `[NO-MEMORY]` |
+| Claude Mem MCP merah | Worker: `claude-mem status`; path `mcp-server.cjs`; restart host |
+| Claude Mem search kosong | Worker mati; filter `project` salah; coba tanpa filter |
+| Tidak ada konteks sesi lama | Hook user-level belum; host belum restart; nama project beda |
+| `npm install -g claude-mem` terpasang tapi tidak rekam | Pasang ulang via `npx claude-mem install` |
 | Agent tetap mau tulis DB | Policy belum ter-load di host itu |
 | Secret di git | Putar password; pindah ke env |
 | OpenCode tidak baca policy | Cek `opencode.json` `instructions` |
@@ -226,9 +276,11 @@ Daftar allowlist lengkap mengikuti rilis `rtk-mcp` — cek README upstream saat 
 | Output tidak hemat token | `rtk` tidak di PATH → fallback mentah; install/perbaiki PATH lalu restart host |
 | `ls` / `pwd` gagal di Windows | Lihat batasan Windows di atas; bukan berarti RTK rusak |
 
-## 6. Urutan setelah tugas selesai
+## 7. Urutan setelah tugas selesai
 
 1. Selesai fitur/fix + tes relevan
-2. Session bermakna? — MemPalace checkpoint
+2. Session bermakna? — MemPalace checkpoint (bukan checkpoint manual Claude Mem)
 3. Perlu re-index? — CBM `index_repository`
-4. Laporkan 1 baris: `Memory: skip ✓` / `Session: checkpoint ✓` / `re-index ✓`
+4. Laporkan 1 baris: `Memory: skip ✓` / `Session: checkpoint ✓` / `re-index ✓`. Tambah `Claude Mem: search ✓` hanya jika sesi ini benar-benar search.
+
+Ikuti `examples/policies/memory-refresh.md` (di app: `docs/agent-policies/memory-refresh.md`).

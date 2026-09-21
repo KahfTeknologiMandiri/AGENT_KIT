@@ -11,6 +11,12 @@
         "MEMPALACE_HOME": "${MEMPALACE_HOME}"
       }
     },
+    "claude-mem": {
+      "command": "node",
+      "args": [
+        "<path-to-claude-mem-plugin>/scripts/mcp-server.cjs"
+      ]
+    },
     "rtk": {
       "command": "C:/Users/<USER>/.cargo/bin/rtk-mcp.exe",
       "args": []
