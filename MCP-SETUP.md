@@ -27,9 +27,22 @@ Detail install CBM khusus Cursor + Windows: [../SETUP_AGENT_TOOLS.md](../SETUP_A
 
 Upstream: https://github.com/DeusData/codebase-memory-mcp
 
-### Sekali per mesin (Windows contoh)
+### Sekali per mesin
 
-```cmd
+Perintah dari [README CBM](https://github.com/DeusData/codebase-memory-mcp). Jangan invent URL installer.
+
+**Linux dan macOS:**
+
+```text
+curl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh | bash
+codebase-memory-mcp --version
+```
+
+Binary tipikal: `~/.local/bin/codebase-memory-mcp`.
+
+**Windows (PowerShell):**
+
+```text
 cd %USERPROFILE%
 curl -L -o install.ps1 https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.ps1
 powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\install.ps1"
@@ -37,9 +50,11 @@ set PATH=%USERPROFILE%\.local\bin;%PATH%
 codebase-memory-mcp --version
 ```
 
+Binary tipikal: `%USERPROFILE%\.local\bin\codebase-memory-mcp.exe`.
+
 ### Daftarkan ke host
 
-**Cursor** ? sering otomatis ke `%USERPROFILE%\.cursor\mcp.json`:
+**Cursor** — sering otomatis ke MCP user (`~/.cursor/mcp.json` / `%USERPROFILE%\.cursor\mcp.json`):
 
 ```json
 "codebase-memory-mcp": {
@@ -47,15 +62,25 @@ codebase-memory-mcp --version
 }
 ```
 
+Linux / macOS: ganti `command` ke path `codebase-memory-mcp` tanpa `.exe` (biasanya `~/.local/bin/codebase-memory-mcp`).
+
 **Claude Code:**
 
-```bash
+Windows:
+
+```text
 claude mcp add --scope project codebase-memory-mcp -- C:/Users/<USER>/.local/bin/codebase-memory-mcp.exe
+```
+
+Linux / macOS:
+
+```text
+claude mcp add --scope project codebase-memory-mcp -- ~/.local/bin/codebase-memory-mcp
 ```
 
 Atau edit `.mcp.json` (lihat `examples/mcp.example.json`).
 
-**OpenCode** ? daftarkan command yang sama di config MCP OpenCode.
+**OpenCode** — daftarkan command yang sama di config MCP OpenCode.
 
 ### Per project
 
@@ -194,21 +219,24 @@ cd rtk-mcp
 cargo build --release
 ```
 
-Binary tipikal Windows setelah `cargo install` / build:
+Binary tipikal setelah `cargo install` / build:
 
 ```text
-%USERPROFILE%\.cargo\bin\rtk.exe
-%USERPROFILE%\.cargo\bin\rtk-mcp.exe
-# atau: <clone>\rtk-mcp\target\release\rtk-mcp.exe
+Windows: %USERPROFILE%\.cargo\bin\rtk.exe
+Windows: %USERPROFILE%\.cargo\bin\rtk-mcp.exe
+Linux / macOS: ~/.cargo/bin/rtk
+Linux / macOS: ~/.cargo/bin/rtk-mcp
 ```
 
-Pastikan `%USERPROFILE%\.cargo\bin` ada di PATH (biasanya sudah setelah rustup).
+Pastikan `~/.cargo/bin` atau `%USERPROFILE%\.cargo\bin` ada di PATH (biasanya sudah setelah rustup).
 
 Opsional (hemat token ekstra di sesi CLI): `rtk init -g` — hook global; terpisah dari MCP.
 
 ### Daftarkan ke host
 
-**Cursor** — user MCP `%USERPROFILE%\.cursor\mcp.json` (atau project `.cursor/mcp.json`):
+**Cursor** — user MCP (`~/.cursor/mcp.json` / `%USERPROFILE%\.cursor\mcp.json`, atau project `.cursor/mcp.json`):
+
+Windows:
 
 ```json
 "rtk": {
@@ -216,10 +244,20 @@ Opsional (hemat token ekstra di sesi CLI): `rtk init -g` — hook global; terpis
 }
 ```
 
+Linux / macOS: ganti `command` ke `~/.cargo/bin/rtk-mcp`.
+
 **Claude Code:**
 
-```bash
+Windows:
+
+```text
 claude mcp add --scope user rtk -- C:/Users/<USER>/.cargo/bin/rtk-mcp.exe
+```
+
+Linux / macOS:
+
+```text
+claude mcp add --scope user rtk -- ~/.cargo/bin/rtk-mcp
 ```
 
 Atau edit `.mcp.json` (lihat `examples/mcp.example.json`).

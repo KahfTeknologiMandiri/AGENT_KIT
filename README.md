@@ -1,12 +1,12 @@
 # Agent Kit
 
-**Agent Kit memasang kebijakan agen + mapping host + MCP memori/DB/shell ke repo aplikasi, supaya Cursor / Claude Code / OpenCode / Codex mengikuti aturan yang sama.**
+**Agent Kit memberi agen di Cursor, Claude Code, OpenCode, dan Codex aturan yang sama di repo aplikasimu: kebijakan, mapping host, dan MCP untuk memori, database, serta shell.**
 
 ```text
 cp -R path/ke/agent-kit/examples/policies docs/agent-policies
 ```
 
-Jika kit di-vendor sebagai `docs/agent-kit/`:
+Kalau kit sudah kamu taruh di dalam project sebagai `docs/agent-kit/`:
 
 ```text
 cp -R docs/agent-kit/examples/policies docs/agent-policies
@@ -19,25 +19,68 @@ Copy-Item -Recurse path\ke\agent-kit\examples\policies docs\agent-policies
 Copy-Item -Recurse docs\agent-kit\examples\policies docs\agent-policies
 ```
 
-Jalankan perintah itu di **repo aplikasi**, bukan di git kit ini.
+Salin itu di **repo aplikasi**. Repo git Agent Kit ini bukan tempatnya.
 
-| Yang didapat | Untuk apa |
-|--------------|-----------|
-| Policy di `examples/policies/` | Perilaku agen (tanya dulu, security, DB RO, Superpowers, …) |
-| Mapping host | File yang sama hidup di Cursor / Claude / OpenCode / Codex |
-| MCP | CBM, MemPalace, Claude Mem, RTK, Postgres RO, Figma (UI) |
-| Superpowers | Fitur/bug: spec → plan → TDD; plugin wajib per host |
-| Figma + Hallmark | UI dari frame yang di-approve, lalu audit; README tetap `readme-style` |
+| Yang kamu dapat | Kegunaannya |
+|-----------------|-------------|
+| Policy di `examples/policies/` | Agen tahu kapan harus tanya, bagaimana jaga secret, kapan Superpowers, dan kapan database hanya boleh dibaca. |
+| Mapping host | File yang sama hidup di Cursor, Claude Code, OpenCode, dan Codex. |
+| MCP | CBM, MemPalace, Claude Mem, RTK, Postgres read-only, dan Figma kalau ada UI. |
+| Superpowers | Fitur dan bug lewat spec, plan, lalu TDD. Plugin wajib di setiap host yang kamu pakai. |
+| Figma + Hallmark | UI dari frame yang sudah kamu approve, lalu diaudit. README tetap mengikuti `readme-style`. |
 
 ## Mulai cepat
 
-Repo **aplikasi**. Checkbox lengkap: [CHECKLIST-NEW-PROJECT.md](CHECKLIST-NEW-PROJECT.md).
+Kerjakan di **repo aplikasi**, bukan di git kit. Checkbox lengkap: [CHECKLIST-NEW-PROJECT.md](CHECKLIST-NEW-PROJECT.md).
 
-1. Jangan pasang otomatis — AI ikut `first-setup` (Ya / Tidak / Nanti).
-2. Salin `examples/policies/` → `docs/agent-policies/` (perintah di atas).
-3. Pilih `stack-backend.postgres.example.md` **atau** `stack-backend.mongo.example.md` → rename `stack-backend.md`.
-4. Salin `examples/AGENTS.md` → `AGENTS.md`; isi `CLAUDE.md` dari `examples/CLAUDE.md.template`.
-5. Pasang plugin Superpowers di **setiap** host yang dipakai:
+Sama di semua OS, langkah 0: jangan minta AI menginstal sendiri. Ia harus tanya dulu lewat `first-setup`: Ya, Tidak, atau Nanti.
+
+Kalau kit sudah di-vendor sebagai `docs/agent-kit/`, ganti `path/ke/agent-kit` (atau `path\ke\agent-kit`) jadi `docs/agent-kit`. WSL ikut Linux.
+
+Pilih **satu** stack: postgres **atau** mongo. Jangan rename keduanya.
+
+### Windows (PowerShell)
+
+`cd` ke folder repo aplikasi, lalu:
+
+```text
+Copy-Item -Recurse path\ke\agent-kit\examples\policies docs\agent-policies
+Rename-Item docs\agent-policies\stack-backend.postgres.example.md stack-backend.md
+Copy-Item path\ke\agent-kit\examples\AGENTS.md AGENTS.md
+Copy-Item path\ke\agent-kit\examples\CLAUDE.md.template CLAUDE.md
+```
+
+Kalau projectmu Mongo, ganti `postgres` jadi `mongo` di baris `Rename-Item`. Lanjut ke Plugin di bawah.
+
+### Linux
+
+`cd` ke folder repo aplikasi, lalu:
+
+```text
+cp -R path/ke/agent-kit/examples/policies docs/agent-policies
+mv docs/agent-policies/stack-backend.postgres.example.md docs/agent-policies/stack-backend.md
+cp path/ke/agent-kit/examples/AGENTS.md AGENTS.md
+cp path/ke/agent-kit/examples/CLAUDE.md.template CLAUDE.md
+```
+
+Kalau projectmu Mongo, ganti `postgres` jadi `mongo` di baris `mv`. Lanjut ke Plugin di bawah.
+
+### macOS
+
+Buka Terminal.app, `cd` ke folder repo aplikasi, lalu:
+
+```text
+cp -R path/ke/agent-kit/examples/policies docs/agent-policies
+mv docs/agent-policies/stack-backend.postgres.example.md docs/agent-policies/stack-backend.md
+cp path/ke/agent-kit/examples/AGENTS.md AGENTS.md
+cp path/ke/agent-kit/examples/CLAUDE.md.template CLAUDE.md
+```
+
+Kalau projectmu Mongo, ganti `postgres` jadi `mongo` di baris `mv`. Path pakai `/`, bukan `\`. Lanjut ke Plugin di bawah.
+
+### Plugin dan MCP (semua OS)
+
+1. Pasang plugin Superpowers di **setiap** host yang kamu pakai:
 
 ```text
 Cursor: di Agent chat `/add-plugin superpowers` (atau cari “superpowers” di marketplace plugin)
@@ -46,7 +89,7 @@ OpenCode: `opencode.json` → `"plugin": ["superpowers@git+https://github.com/ob
 Codex App: Plugins → Superpowers. Codex CLI: `/plugins` → search `superpowers` → Install
 ```
 
-6. Jika ada UI: pasang Figma plugin/MCP. Tanpa MCP Figma → UI baru berhenti.
+2. Kalau project punya UI, pasang Figma juga. Tanpa MCP Figma, UI baru harus berhenti.
 
 ```text
 Cursor: `/add-plugin figma` lalu OAuth
@@ -55,10 +98,10 @@ Codex App: plugin Figma. CLI: `codex mcp add figma --url https://mcp.figma.com/m
 OpenCode: remote OAuth **belum** di katalog Figma — kerja UI di host ini **berhenti** sampai Figma allowlist; jangan PAT; Desktop MCP bukan generate
 ```
 
-7. MCP disarankan: CBM, MemPalace, Claude Mem, RTK; Postgres jika project pakai Postgres. Perintah penuh: [MCP-SETUP.md](MCP-SETUP.md).
-8. Buka chat agen baru; uji perilaku di CHECKLIST §D.
+3. MCP yang disarankan: CBM, MemPalace, Claude Mem, dan RTK. Tambah Postgres kalau projectmu memang Postgres. Per OS: [MCP-SETUP.md](MCP-SETUP.md).
+4. Buka chat agen baru, lalu uji perilaku di CHECKLIST §D.
 
-Stack cursorrules (maks 5–7) **opsional**, setelah konfirmasi. Bukan langkah wajib.
+Stack cursorrules (maksimal 5–7 rule) boleh, setelah kamu konfirmasi. Bukan langkah wajib.
 
 ## Kit vs aplikasi
 
@@ -68,9 +111,11 @@ app konsumen: examples/policies → docs/agent-policies
               lalu mapping lewat PROVIDER-MAPPING.md / CHECKLIST-NEW-PROJECT.md
 ```
 
-**Jangan** salin kebijakan ke `docs/agent-policies/` di dalam repo kit ini (`docs/agent-policies/` dan `.cursor/` di-gitignore). Spec/plan Superpowers di `docs/superpowers/` dilacak git.
+Di repo kit ini, **jangan** menyalin kebijakan ke `docs/agent-policies/`. Folder itu dan `.cursor/` di-gitignore. Spec dan plan Superpowers untuk kit sendiri hidup di `docs/superpowers/` dan dilacak git.
 
 ## Host
+
+Tabel ini menjawab file apa yang hidup di host mana. Perintah plugin harus sama dengan CHECKLIST. Overlay seperti `superpowers.mdc` dan `figma.mdc` hanya pointer, bukan isi skill.
 
 | Yang dipasang | Cursor | Claude Code | OpenCode | Codex / generic |
 |---------------|--------|-------------|----------|-----------------|
@@ -79,12 +124,16 @@ app konsumen: examples/policies → docs/agent-policies
 | Figma (jika UI) | `/add-plugin figma` + overlay `figma.mdc` | `claude plugin install figma@claude-plugins-official` | Overlay saja; remote MCP **bukan** katalog → UI **berhenti** | Plugin app atau `codex mcp add figma --url https://mcp.figma.com/mcp` |
 | Hallmark | rule `.mdc` + skill `examples/skills/hallmark/` (disalin ke app) | `~/.claude/skills/hallmark/` atau project skills | pointer `SKILL.md` di `AGENTS.md` / `instructions` | `~/.codex/skills/hallmark/` atau `.codex/skills/` |
 
-Overlay Superpowers/Figma **bukan** isi skill. Jangan vendor skill Superpowers atau Figma ke git kit. Host di luar empat itu: tautan README upstream, bukan checklist kit. Detail: [PROVIDER-MAPPING.md](PROVIDER-MAPPING.md).
+Jangan masukkan skill Superpowers atau Figma ke git kit.
+
+Kalau host-mu di luar empat itu, ikuti README upstream, bukan checklist kit. Path lengkap: [PROVIDER-MAPPING.md](PROVIDER-MAPPING.md).
 
 ## MCP
 
-| MCP | Peran | Wajib? | Kunci di README |
-|-----|--------|--------|-----------------|
+Setiap MCP cukup satu cek di bawah. Perintah install lengkap ada di MCP-SETUP.
+
+| MCP | Peran | Wajib? | Cek cepat |
+|-----|--------|--------|-----------|
 | Codebase Memory | Graph kode | Disarankan | `codebase-memory-mcp --version` + index project |
 | MemPalace | Keputusan / checkpoint | Disarankan | uji `checkpoint` 1× |
 | Claude Mem | Observasi sesi (hook + worker) | Disarankan | `npx claude-mem install` + `--provider claude`; **bukan CMEM Pro** |
@@ -92,9 +141,15 @@ Overlay Superpowers/Figma **bukan** isi skill. Jangan vendor skill Superpowers a
 | Postgres | SELECT + schema | Jika project Postgres | user **read-only**; tolak DELETE |
 | Figma | Frame sumber UI | Wajib untuk UI di app | remote `https://mcp.figma.com/mcp`; OAuth, bukan PAT |
 
-Jangan commit secret, `.env`, `FIGMA_ACCESS_TOKEN`, atau `~/.claude-mem/settings.json`. Claude Mem hilang → kerja lanjut tanpa search; **bukan** gerbang stop. Figma MCP hilang → UI baru **berhenti**; jangan fallback catalog Hallmark. Flutter MCP / Playwright-as-MCP di luar kit. Playwright sebagai perintah boleh lewat allowlist RTK.
+Jangan commit secret, file `.env`, `FIGMA_ACCESS_TOKEN`, atau `~/.claude-mem/settings.json`.
+
+Kalau Claude Mem hilang, kerja tetap jalan tanpa search. Itu **bukan** alasan berhenti. Kalau Figma MCP hilang, UI baru **berhenti**. Jangan ganti dengan tema catalog Hallmark.
+
+Flutter MCP dan Playwright-as-MCP di luar kit. Playwright sebagai perintah biasa boleh lewat allowlist RTK.
 
 ## Katalog kebijakan
+
+Pakai tabel ini untuk memilih policy. Penjelasan lengkap ada di RULES-CATALOG.
 
 | Policy | Kapan | Bukan untuk |
 |--------|--------|-------------|
@@ -111,9 +166,11 @@ Jangan commit secret, `.env`, `FIGMA_ACCESS_TOKEN`, atau `~/.claude-mem/settings
 | `stack-backend` | Satu file setelah pilih Postgres **atau** Mongo | Menyalin contoh Mongo ke project Postgres |
 | stack cursorrules | Opsional, maks 5–7, konfirmasi dulu | `alwaysApply: true` pada rule luar; menimpa policy kit |
 
-Path di kit = `examples/policies/`; di app = `docs/agent-policies/`. Isi lengkap: [RULES-CATALOG.md](RULES-CATALOG.md).
+Di kit, path-nya `examples/policies/`. Di app, `docs/agent-policies/`. Penjelasan tiap file: [RULES-CATALOG.md](RULES-CATALOG.md).
 
 ## Alur UI
+
+Kalau kamu membangun halaman di **aplikasi**:
 
 ```text
 spec Superpowers disetujui
@@ -121,30 +178,43 @@ spec Superpowers disetujui
     → Hallmark (implement dari frame + audit sebelum ship)
 ```
 
-- Overlay `figma.md` = sumber layout/IA/token. Hallmark = kualitas + `hallmark audit`, bukan pengganti frame.
-- Tanpa MCP Figma → **berhenti**. Jangan invent tema catalog Hallmark.
-- OpenCode: remote MCP Figma bukan katalog → UI baru **berhenti**; jangan PAT.
-- Pengecualian Figma: ejaan/tanda baca di string yang **sudah ada**; README Markdown (`readme-style`); kerja non-UI; **repo kit ini**.
-- Responsive desktop+mobile. Placeholder AI bukan “selesai”.
-- Build mode (spec+plan Superpowers disetujui) tidak menghapus gerbang node Figma untuk permukaan UI baru.
-- Skill Hallmark di-vendor di `examples/skills/hallmark/`; skill Figma/Superpowers **tidak**.
+Overlay `figma.md` adalah sumber layout, IA, dan token. Hallmark mengurus kualitas plus `hallmark audit`. Hallmark tidak mengganti frame.
+
+Tanpa MCP Figma, **berhenti**. Jangan mengarang tema dari catalog Hallmark.
+
+Di OpenCode, remote MCP Figma belum masuk katalog, jadi UI baru **berhenti**. Jangan pakai PAT.
+
+Figma tidak wajib untuk ejaan di string yang sudah ada, README Markdown (`readme-style`), kerja non-UI, dan **repo kit ini**.
+
+Halaman harus responsive di desktop dan mobile. Placeholder AI bukan “selesai”.
+
+Build mode (spec dan plan Superpowers sudah disetujui) tidak menghapus gerbang node Figma untuk permukaan UI baru.
+
+Skill Hallmark di-vendor di `examples/skills/hallmark/`. Skill Figma dan Superpowers **tidak**.
 
 Overlay: [examples/policies/figma.md](examples/policies/figma.md), [examples/policies/hallmark.md](examples/policies/hallmark.md). Setup skill: [examples/skills/hallmark/README.md](examples/skills/hallmark/README.md).
 
-Overlay Figma **idle** di repo kit (docs/examples, bukan produk UI).
+Di repo kit ini overlay Figma **idle**. Kit ini docs dan examples, bukan produk UI.
 
 ## Kerja di repo kit
 
-Bukan Mulai cepat.
+Kalau kamu mengedit Agent Kit sendiri, bukan memasangnya ke app:
 
-- Sumber kebijakan: `examples/policies/` (git). `AGENTS.md` / `CLAUDE.md` root memakai folder itu.
-- **Jangan** membuat `docs/agent-policies/` atau `.cursor/rules/` di repo ini.
-- Spec/plan Superpowers kit: `docs/superpowers/` (dilacak git).
-- Edit policy di `examples/policies/`. Jangan vendor skill Superpowers atau Figma.
-- Hallmark: vendor di `examples/skills/hallmark/`; update upstream per README skill itu.
-- Tidak ada server app / test suite. Tugas docs selesai jika tautan dan fakta selaras CHECKLIST / MCP-SETUP / PROVIDER-MAPPING / RULES-CATALOG.
+Sumber kebijakan: `examples/policies/` (git). `AGENTS.md` dan `CLAUDE.md` di root memakai folder itu.
+
+**Jangan** membuat `docs/agent-policies/` atau `.cursor/rules/` di repo ini.
+
+Spec dan plan Superpowers kit: `docs/superpowers/` (dilacak git).
+
+Edit policy di `examples/policies/`. Jangan vendor skill Superpowers atau Figma.
+
+Hallmark: vendor di `examples/skills/hallmark/`. Update upstream mengikuti README skill itu.
+
+Tidak ada server app dan tidak ada test suite. Tugas docs selesai jika tautan dan fakta selaras dengan CHECKLIST, MCP-SETUP, PROVIDER-MAPPING, dan RULES-CATALOG.
 
 ## Dokumen panjang
+
+Butuh checkbox, path host, atau perintah MCP yang lebih panjang? Buka file di bawah.
 
 | Doc | Isi panjang |
 |-----|-------------|
@@ -159,5 +229,6 @@ Bukan Mulai cepat.
 | [examples/workflows/stack-cursorrules/](examples/workflows/stack-cursorrules/) | Rule stack opsional |
 | [examples/skills/hallmark/README.md](examples/skills/hallmark/README.md) | Setup Hallmark |
 
-Agen **di repo ini:** `examples/policies/` (lewat `AGENTS.md` root).  
-Agen **di app:** `docs/agent-policies/` (kit referensi: repo ini / `docs/agent-kit/` di project lain).
+Agen **di repo ini** mengikuti `examples/policies/` lewat `AGENTS.md` root.
+
+Agen **di app** mengikuti `docs/agent-policies/`. Kit-nya tetap repo ini, atau salinan `docs/agent-kit/` di project lain.
